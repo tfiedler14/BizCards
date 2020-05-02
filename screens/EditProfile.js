@@ -86,6 +86,8 @@ class CreateCardScreen extends React.Component {
         this.setState({
             addMediaDialog: false,
             addMediaInput: false,
+            pendingAdd: false,
+            editActive: false,
             mediaInput: {}
         })
     }
@@ -97,9 +99,10 @@ class CreateCardScreen extends React.Component {
     }
     handleAddDomain(domainKey, domainLink, edit) {
 
-        console.log("made it to domain")
         temp = this.state.socialMedias
+        console.log("made it to domain", temp)
         insert = { key: domainKey, link: domainLink }
+        
         userLink = ""
         this.setState({
             addMediaInput: true,
@@ -149,15 +152,15 @@ class CreateCardScreen extends React.Component {
         })
     }
     handleSaveLink() {
-        input = {site:this.state.mediaInput["key"] , link:this.state.mediaInput["link"], checked:false}
-        
+        input = { site: this.state.mediaInput["key"], link: this.state.mediaInput["link"], checked: false }
+
         console.log("input", input)
         medias = this.state.socialMedias
         sites = medias.map(function (item) { return item.site; })
         console.log("site", input["site"])
         console.log(sites.indexOf(input["site"]))
-        if(sites.indexOf(input["site"]) >= 0){
-            var removeIndex = medias.map(function(item) { return item.site; }).indexOf(input["site"]);
+        if (sites.indexOf(input["site"]) >= 0) {
+            var removeIndex = medias.map(function (item) { return item.site; }).indexOf(input["site"]);
             medias.splice(removeIndex, 1)
         }
         medias.push(input)
@@ -166,17 +169,17 @@ class CreateCardScreen extends React.Component {
             pendingAdd: false,
             addMediaDialog: false,
             addMediaInput: false,
-            editActive:false,
+            editActive: false,
             mediaInput: {}
         })
 
         alert("Your link has been successfully saved")
     }
 
-    handleDeleteLink(){
+    handleDeleteLink() {
         input = this.state.mediaInput
         medias = this.state.socialMedias
-        var removeIndex = medias.map(function(item) { return item.site; }).indexOf(input["key"]);
+        var removeIndex = medias.map(function (item) { return item.site; }).indexOf(input["key"]);
         // remove object
         medias.splice(removeIndex, 1)
         console.log(medias)
@@ -233,20 +236,20 @@ class CreateCardScreen extends React.Component {
             console.log("Bio")
 
         }
-        if(currState.editActive == true || currState.pendingAdd == true){
+        if (currState.editActive == true || currState.pendingAdd == true) {
             validSave = false
         }
         console.log("CurrentState", this.state.profile, this.state.socialMedias)
         if (validSave) {
-            firebaseApp.database().ref("/users/"+this.props.user.uid + "/profile/").set(this.state.profile);
+            firebaseApp.database().ref("/users/" + this.props.user.uid + "/profile/").set(this.state.profile);
             return firebaseApp.database().ref("/users/" + this.props.user.uid + "/medias/").set(this.state.socialMedias).then(() => {
                 Alert.alert("Save Successful", "The adjusts you've made on your profile have been saved!");
                 this.props.navigation.navigate('Profile')
             })
         } else {
-            if(currState.editActive == true && profileError == false){
+            if (currState.editActive == true && profileError == false) {
                 Alert.alert("Wait a minute!", "Please finish editing your current link before saving")
-            } else{
+            } else {
                 Alert.alert("Save Unsuccessful", "Please make sure you have entered valid entries for all primary information fields!");
 
             }
@@ -275,19 +278,19 @@ class CreateCardScreen extends React.Component {
                                 <View style={{ flexDirection: 'row', }} >
                                     <Text style={{ color: '#137AC2', textAlignVertical: 'center', left: 0 }}>Full Name: </Text>
                                     <TouchableOpacity style={{ backgroundColor: '#FFF', borderColor: '#000', right: 0 }}>
-                                        <TextInput containerStyle={{ width: '100%' }} value={this.state.profile[0].FullName} onChangeText={fullName => this.handleProfileEdit(fullName, 0)} />
+                                        <TextInput containerStyle={{ padding: 2, margin: 2, width: '100%' }} value={this.state.profile[0].FullName} onChangeText={fullName => this.handleProfileEdit(fullName, 0)} />
                                     </TouchableOpacity>
                                 </View>
                                 <View style={{ flexDirection: 'row' }} >
                                     <Text style={{ color: '#137AC2', textAlignVertical: 'center' }}>Email: </Text>
                                     <TouchableOpacity >
-                                        <TextInput containerStyle={{ width: '100%', alignSelf: 'flex-end' }} value={this.state.profile[1].Email} onChangeText={Email => this.handleProfileEdit(Email, 1)} />
+                                        <TextInput containerStyle={{ padding: 2, margin: 2, width: '100%', alignSelf: 'flex-end' }} value={this.state.profile[1].Email} onChangeText={Email => this.handleProfileEdit(Email, 1)} />
                                     </TouchableOpacity>
                                 </View>
                                 <View style={{ flexDirection: 'row' }} >
                                     <Text style={{ color: '#137AC2', textAlignVertical: 'center' }}>Mobile: </Text>
                                     <TouchableOpacity >
-                                        <TextInput containerStyle={{ width: '100%', alignSelf: 'flex-end' }} keyboardType={'name-phone-pad'} value={this.state.profile[2].Mobile} onChangeText={Mobile => this.handleProfileEdit(Mobile, 2)} />
+                                        <TextInput containerStyle={{ padding: 2, margin: 2, width: '100%', alignSelf: 'flex-end' }} keyboardType={'name-phone-pad'} value={this.state.profile[2].Mobile} onChangeText={Mobile => this.handleProfileEdit(Mobile, 2)} />
                                     </TouchableOpacity>
                                 </View>
                                 <View style={{ flexDirection: 'row' }} >
@@ -338,19 +341,19 @@ class CreateCardScreen extends React.Component {
                                 </View>
                                 {this.state.editActive ?
                                     <>
-                                        <View style={{ justifyContent:'center', flexDirection:"row" }} >
-                                            <TouchableOpacity style={{ padding: 3, backgroundColor: "#032c8e", borderRadius: 15, alignItems: 'center', margin:2 }} onPress={() => this.handleSaveLink()} >
-                                                <Text style={{ textAlignVertical: 'center', color:'#FFF'}} > Update Link</Text>
+                                        <View style={{ justifyContent: 'center', flexDirection: "row" }} >
+                                            <TouchableOpacity style={{ padding: 3, backgroundColor: "#032c8e", borderRadius: 15, alignItems: 'center', margin: 2 }} onPress={() => this.handleSaveLink()} >
+                                                <Text style={{ textAlignVertical: 'center', color: '#FFF' }} > Update Link</Text>
                                             </TouchableOpacity>
-                                            <TouchableOpacity style={{padding:3, backgroundColor: "#e64940", borderRadius: 15, alignItems: 'center', margin:2  }} onPress={() => this.handleDeleteLink()} >
-                                                <Text style={{ textAlignVertical: 'center', color:'#FFF' }} > Delete Link</Text>
+                                            <TouchableOpacity style={{ padding: 3, backgroundColor: "#e64940", borderRadius: 15, alignItems: 'center', margin: 2 }} onPress={() => this.handleDeleteLink()} >
+                                                <Text style={{ textAlignVertical: 'center', color: '#FFF' }} > Delete Link</Text>
                                             </TouchableOpacity>
                                         </View>
                                     </> :
                                     <>
                                         <View style={{ alignItems: 'center' }} >
-                                            <TouchableOpacity style={{ backgroundColor: "#032c8e", borderRadius: 25, alignItems: 'center' }} onPress={() => this.handleSaveLink()} >
-                                                <Text style={{ textAlignVertical: 'center' }} > Save Link</Text>
+                                            <TouchableOpacity style={{ padding: 3, backgroundColor: "#032c8e", borderRadius: 15, alignItems: 'center', margin: 2 }} onPress={() => this.handleSaveLink()} >
+                                                <Text style={{ textAlignVertical: 'center', color: '#FFF' }} > Save Link</Text>
                                             </TouchableOpacity>
                                         </View>
                                     </>
@@ -368,7 +371,7 @@ class CreateCardScreen extends React.Component {
 
                         {this.state.socialMedias.length == 0 ?
                             <Text style={{ textAlign: 'center', fontWeight: 'bold', paddingLeft: 10, paddingTop: 5, textAlignVertical: 'bottom' }}>Add social media link</Text>
-                            : <FlatList  data={this.state.socialMedias} extraData={this.state} keyExtractor={item => item.site} key={item => item.site} renderItem={({ item }) =>
+                            : <FlatList data={this.state.socialMedias} extraData={this.state} keyExtractor={item => item.site} key={item => item.site} renderItem={({ item }) =>
                                 <TouchableOpacity onPress={() => this.handleExistingInteraction(item)} style={{ margin: 5, padding: 8, alignItems: 'center', backgroundColor: "#47ceff", borderColor: '#D0D0D0', borderRadius: 25, borderWidth: 2 }}>
                                     <Text style={{ color: '#FFF', fontWeight: "bold", fontSize: 20 }}>{item.site}</Text>
                                 </TouchableOpacity>

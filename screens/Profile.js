@@ -1,18 +1,31 @@
 import React from 'react'
 import styled, { css } from "@emotion/native"
 import { QRCode } from 'react-native-custom-qr-codes-expo';
-import { View, Text, StyleSheet, TouchableOpacity, ActivityIndicator } from 'react-native'
+import { View, Text, StyleSheet, Image, TouchableOpacity, ActivityIndicator } from 'react-native'
+import { Card, CheckBox } from 'react-native-elements';
 import { connect } from 'react-redux'
 import { FloatingAction } from "react-native-floating-action";
 import firebase from 'firebase'
+import * as firebaseApp from "firebase"
+
 import * as WebBrowser from 'expo-web-browser';
 require('firebase/auth')
 
 class Profile extends React.Component {
 	constructor(props) {
 		super(props);
+		const userID = this.props.navigation.getParam('userUid')
+		this.userInfo = firebaseApp.database().ref("/users/" + userID)
 		this.state = {
 			isLoading: true,
+			profile: [
+				{ FullName: "" },
+				{ Email: "", checked: true },
+				{ Mobile: "", checked: false },
+				{ Bio: "", checked: false }
+			],
+			socialMedias: [],
+			timeStamp: ""
 		}
 	}
 	componentWillMount() {
@@ -21,7 +34,54 @@ class Profile extends React.Component {
 				isLoading: false
 			})
 		},
-		10)
+			10)
+	}
+	componentDidMount() {
+		this.listenForUser(this.userInfo)
+	}
+
+	async listenForUser(userInfo) {
+		tempState = []
+		var loadprofile = []
+		var loadsocialMedias = []
+		var time = ""
+		console.log("USRINFO", userInfo)
+		console.log("PROPS", this.props)
+		await userInfo.on("value", dataSnapshot => {
+			dataSnapshot.forEach(child => {
+				if (child.key == 'profile') {
+					var proArray = child.val()
+					proArray.forEach((item) => {
+						loadprofile.push(item)
+					})
+				}
+				else if (child.key == 'medias') {
+					var mediaArray = child.val()
+					mediaArray.forEach((item) => {
+						loadsocialMedias.push(item)
+					})
+				} else {
+					time = child.val()
+				}
+			})
+			console.log("nestedPro", loadprofile)
+			this.setState({
+				profile: loadprofile,
+				socialMedias: loadsocialMedias,
+				timeStamp: time
+			})
+			console.log(this.state)
+
+			console.log("IP", this.state.profile[0].FullName)
+			console.log("nestedMed", loadsocialMedias)
+
+		})
+
+		console.log("profile", loadprofile)
+		console.log("medias", loadsocialMedias)
+
+		console.log("state", this.state)
+
 	}
 
 	handleSignout = () => {
@@ -31,7 +91,7 @@ class Profile extends React.Component {
 
 	render() {
 		const userUid = this.props.navigation.getParam('userUid'); //added
-		
+
 		const actions = [
 			{
 				text: "Set Card",
@@ -53,8 +113,8 @@ class Profile extends React.Component {
 			}
 		];
 
-		if(this.state.isLoading) {
-			return(
+		if (this.state.isLoading) {
+			return (
 				<View style={styles.loading} >
 					<ActivityIndicator size='large' color='#C2185B' />
 				</View>
@@ -69,6 +129,25 @@ class Profile extends React.Component {
 					<Name>{this.props.user.name}</Name>
 
 				</Titlebar>
+				<View >
+					<Card
+						title='Current Card'
+						titleStyle={{ color: '#137AC2' }}
+						containerStyle={styles.primaryCard} >
+						<View style={{ flexDirection: 'row', justifyContent: 'space-between' }} >
+							<Image source={require("../assets/defaultProfPic.png")}
+								style={{ top: 30, left: 0, width: 65, height: 65, resizeMode: 'contain', borderRadius: 15 }}>
+							</Image>
+							<View style={{ flexDirection: 'column' }} >
+								<Text style={{ padding: 5, fontWeight: "bold", textAlign: 'center' }}>{this.state.profile[0].FullName}</Text>
+								<Text style={{ padding: 5, fontWeight: "bold", }}>{this.state.profile[1].Email}</Text>
+								<Text style={{ padding: 5, fontWeight: "bold", }}>{this.state.profile[2].Mobile}</Text>
+								<Text style={{ padding: 5, fontWeight: "bold", }}>{this.state.profile[3].Bio}</Text>
+							</View>
+						</View>
+
+					</Card>
+				</View>
 				<View >
 					<QRCodeBlock style={styles.qrcodeContainer} >
 						<TouchableOpacity onPress={this._handlePressButtonAsync}>

@@ -21,7 +21,7 @@ class Profile extends React.Component {
 				isLoading: false
 			})
 		},
-		1000)
+		10)
 	}
 
 	handleSignout = () => {

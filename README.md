@@ -24,5 +24,6 @@ Customizable Electronic business cards
 ###### import { QRCode } from 'react-native-custom-qr-codes-expo'
 ###### <QRCode logo={require('./dab.png')} content='http://bizcards.tools/'/>
 
-Code was adapted from https://heartbeat.fritz.ai/how-to-build-an-email-authentication-app-with-firebase-firestore-and-react-native-a18a8ba78574 
+Login and Signup were adapted from https://heartbeat.fritz.ai/how-to-build-an-email-authentication-app-with-firebase-firestore-and-react-native-a18a8ba78574 
+Change password/email was adapted from https://github.com/ProProgramming101/expo-firebase-auth-change-password/blob/master/screens/TestScreen.js 
 

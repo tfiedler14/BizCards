@@ -1,16 +1,49 @@
 import React from 'react'
 import styled, { css } from "@emotion/native"
-import { View, Text, StyleSheet, TouchableOpacity, Image, TextInput } from 'react-native'
+import { View, Text, StyleSheet, TouchableOpacity, Image, TextInput, Alert, Button } from 'react-native'
 import { Card } from 'react-native-elements';
 import { connect } from 'react-redux'
 import firebase from 'firebase'
 require('firebase/auth')
 
 class Settings extends React.Component {
+
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            currentPassword: "",
+            newPassword: "",
+            newEmail: "",
+        };
+    }
+
 	handleSignout = () => {
 		firebase.auth().signOut()
 		this.props.navigation.navigate('Login')
-	}
+    }
+    reauthenticate = (currentPassword) => {
+        var user = firebase.auth().currentUser;
+        var cred = firebase.auth.EmailAuthProvider.credential(user.email, currentPassword);
+        return user.reauthenticateWithCredential(cred);
+      }
+    onChangePassword = () => {
+        this.reauthenticate(this.state.currentPassword).then(() => {
+          var user = firebase.auth().currentUser;
+          user.updatePassword(this.state.newPassword).then(() => {
+            Alert.alert("Password was changed");
+          }).catch((error) => { console.log(error.message); });
+        }).catch((error) => { console.log(error.message) });
+      }
+    
+    onChangeEmail = () => {
+        this.reauthenticate(this.state.currentPassword).then(() => {
+          var user = firebase.auth().currentUser;
+          user.updateEmail(this.state.newEmail).then(() => {
+            Alert.alert("Email was changed");
+          }).catch((error) => { console.log(error.message); });
+        }).catch((error) => { console.log(error.message) });
+      }
 
 	render() {
 		return (
@@ -36,34 +69,37 @@ class Settings extends React.Component {
                 <AddIcon source = {require("../assets/logOut.png")} />
                 </TouchableOpacity>
 				<View style={styles.primaryContainer}>
-                    <Card
-                        title='Account Information'
-                        titleStyle={{ color: '#137AC2' }}
-                        containerStyle={styles.primaryCard} >
-                        <View style={{ flexDirection: 'row' }} >
-                            <View style={{ flexDirection: 'column' }} >
-                                <View style={{ flexDirection: 'row' }} >
-                                    <Text style={{color: '#FFF', textAlignVertical: 'center'}}>Change account email: </Text>
-                                    <TextInput containerStyle={{ width: '100%', alignSelf: 'flex-end' }}  />
-                                </View>
-                                <View style={{ flexDirection: 'row' }} >
-                                    <Text style={{color: '#FFF', textAlignVertical: 'center'}}>Change password: </Text>
-                                    <TextInput containerStyle={{ width: '100%', alignSelf: 'flex-end' }}  />
-                                </View>
-                                <View style={{ flexDirection: 'row' }} >
-                                    <Text style={{color: '#FFF', textAlignVertical: 'center'}}>Confirm password change: </Text>
-                                    <TextInput containerStyle={{ width: '100%', alignSelf: 'flex-end' }}  />
-                                </View>
-                            </View>
-                        </View>
+                    <Text>Enter password to change password or email</Text> 
+                <TextInput style={styles.textInput} value={this.state.currentPassword}
+                placeholder="Current Password" autoCapitalize="none" secureTextEntry={true}
+                onChangeText={(text) => { this.setState({currentPassword: text}) }}
+                />
 
-                    </Card>
-                    <TouchableOpacity style={styles.saveBtn} onPress={() => this.props.navigation.navigate('Profile')}>
-                        <Text style={styles.saveText}>Save Account Changes</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.saveBtn} onPress={() => this.props.navigation.navigate('Profile')}>
-                        <Text style={styles.saveText}>Delete Account</Text>
-                    </TouchableOpacity>
+                <TextInput style={styles.textInput} value={this.state.newPassword}
+                placeholder="New Password" autoCapitalize="none" secureTextEntry={true}
+                onChangeText={(text) => { this.setState({newPassword: text}) }}
+                />
+
+                <Button title="Change Password" onPress={this.onChangePassword} />
+
+                <TextInput style={styles.textInput} value={this.state.newEmail}
+                placeholder="New Email" autoCapitalize="none" keyboardType="email-address"
+                onChangeText={(text) => { this.setState({newEmail: text}) }}
+                />
+
+                <Button title="Change Email" onPress={this.onChangeEmail} />
+
+                <TouchableOpacity style={styles.saveBtn} onPress={() => {
+                firebase
+                    .auth()
+                    .currentUser.delete()
+                    .then(this.props.navigation.navigate('Login'))
+                    .catch(error => {
+                    console.log('User not deleted.');
+                    });
+                }}>
+                    <Text style={styles.saveText}>Delete Account</Text>
+                </TouchableOpacity>
                 </View>
 			</Container>
 		)

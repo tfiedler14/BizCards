@@ -2,7 +2,11 @@ import React, { useState } from "react";
 import styled, { css } from "@emotion/native";
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
+<<<<<<< HEAD
 import { StyleSheet, Text, Image, TextInput, TouchableOpacity, View, FlatList, Alert } from "react-native";
+=======
+import { StyleSheet, Text, Image, TextInput, TouchableOpacity, View, FlatList, Alert, KeyboardAvoidingView } from "react-native";
+>>>>>>> 0f817a96972b14c0c0fd6b0b2fc2674bbf3de73a
 import { Card, CheckBox, Icon } from 'react-native-elements';
 import * as firebaseApp from "firebase"
 import moment from 'moment';
@@ -107,6 +111,7 @@ class CreateCardScreen extends React.Component {
             addMediaDialog: true
         })
 
+<<<<<<< HEAD
     }
     handleAddDomain(domainKey, domainLink, edit) {
 
@@ -122,6 +127,10 @@ class CreateCardScreen extends React.Component {
         })
 
         console.log("curr", insert)
+=======
+    handleAddLink() {
+        
+>>>>>>> 0f817a96972b14c0c0fd6b0b2fc2674bbf3de73a
     }
 
     handleProfileEdit(field, index) {
@@ -244,6 +253,7 @@ class CreateCardScreen extends React.Component {
             profileError = true
             console.log("Bio")
 
+<<<<<<< HEAD
         }
         if(currState.editActive == true || currState.pendingAdd == true){
             validSave = false
@@ -253,6 +263,11 @@ class CreateCardScreen extends React.Component {
         if (validSave) {
             firebaseApp.database().ref("/users/"+this.props.user.uid + "/profile/").update(this.state.profile);
             return firebaseApp.database().ref("/users/" + this.props.user.uid + "/medias/").set(this.state.socialMedias).then(() => {
+=======
+        if (validSave) {
+            console.log("finalState", this.state)
+            return firebaseApp.database().ref("/users/" + this.props.user.uid).update(this.state).then(() => {
+>>>>>>> 0f817a96972b14c0c0fd6b0b2fc2674bbf3de73a
                 Alert.alert("Save Successful", "The adjusts you've made on your profile have been saved!");
                 this.props.navigation.navigate('Profile')
             })
@@ -380,20 +395,31 @@ class CreateCardScreen extends React.Component {
                         containerStyle={styles.primaryCard} >
 
                         {this.state.socialMedias.length == 0 ?
+<<<<<<< HEAD
                             <Text style={{ textAlign: 'center', fontWeight: 'bold', paddingLeft: 10, paddingTop: 5, textAlignVertical: 'bottom' }}>Add social media link</Text>
                             : <FlatList  data={this.state.socialMedias} extraData={this.state} keyExtractor={item => item.site} renderItem={({ item }) =>
                                 <TouchableOpacity onPress={() => this.handleExistingInteraction(item)} style={{ margin: 5, padding: 8, alignItems: 'center', backgroundColor: "#47ceff", borderColor: '#D0D0D0', borderRadius: 25, borderWidth: 2 }}>
                                     <Text style={{ color: '#FFF', fontWeight: "bold", fontSize: 20 }}>{item.site}</Text>
                                 </TouchableOpacity>
                             } />
+=======
+                            <TouchableOpacity style={{ flexDirection: 'row', justifyContent: 'center' }} onPress={() => this.handleAddLink()}>
+                                <Icon name='account-plus' type='material-community' />
+                                <Text style={{ textAlign: 'center', fontWeight: 'bold', paddingLeft: 10, paddingTop: 5, textAlignVertical: 'bottom' }}>Add social media link</Text>
+                            </TouchableOpacity>
+                            : <FlatList data={this.state.socialMedias} keyExtractor={item => item.name} renderItem={({ item }) => <Text>{item}</Text>} />
+
+
+>>>>>>> 0f817a96972b14c0c0fd6b0b2fc2674bbf3de73a
                         }
                     </Card>
                 </View>
-                <TouchableOpacity style={styles.saveBtn} onPress={() => this.handleProfileSave()}>
-                    <Text style={styles.saveText}>Save Profile</Text>
-                </TouchableOpacity>
+                <KeyboardAvoidingView style={styles.avoidingContainer} >
+                    <TouchableOpacity style={styles.saveBtn} onPress={() => this.handleProfileSave()}>
+                        <Text style={styles.saveText}>Save Profile</Text>
+                    </TouchableOpacity>
+                </KeyboardAvoidingView>
             </View>
-
         );
     }
 
@@ -492,6 +518,9 @@ const styles = StyleSheet.create({
     },
     saveText: {
         color: "white"
+    },
+    avoidingContainer: {
+        flex: 1,
     }
 });
 

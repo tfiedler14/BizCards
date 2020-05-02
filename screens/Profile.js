@@ -75,7 +75,7 @@ class Profile extends React.Component {
 							<QRCode
 								logo={require("../assets/profile.png")}
 								codeStyle='square'
-								content={`http://bizcards.tools/profile/${userUid}`}
+								content={'http://bizcards.tools/profile/' + userUid}
 							/>
 						</TouchableOpacity>
 					</QRCodeBlock>

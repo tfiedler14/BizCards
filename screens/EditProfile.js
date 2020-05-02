@@ -64,23 +64,13 @@ class CreateCardScreen extends React.Component {
                     time = child.val()
                 }
             })
-            console.log("nestedPro", loadprofile)
             this.setState({
                 profile: loadprofile,
                 socialMedias: loadsocialMedias,
                 timeStamp: time
             })
-            console.log(this.state)
-
-            console.log("IP", this.state.profile[0].FullName)
-            console.log("nestedMed", loadsocialMedias)
 
         })
-
-        console.log("profile", loadprofile)
-        console.log("medias", loadsocialMedias)
-
-        console.log("state", this.state)
 
     }
 
@@ -104,8 +94,6 @@ class CreateCardScreen extends React.Component {
         this.setState({
             addMediaDialog: true
         })
-
-// <<<<<<< HEAD
     }
     handleAddDomain(domainKey, domainLink, edit) {
 
@@ -121,10 +109,7 @@ class CreateCardScreen extends React.Component {
         })
 
         console.log("curr", insert)
-// =======
-//     handleAddLink() {
-        
-// >>>>>>> 0f817a96972b14c0c0fd6b0b2fc2674bbf3de73a
+
     }
 
     handleProfileEdit(field, index) {
@@ -247,21 +232,14 @@ class CreateCardScreen extends React.Component {
             profileError = true
             console.log("Bio")
 
-// <<<<<<< HEAD
         }
         if(currState.editActive == true || currState.pendingAdd == true){
             validSave = false
         }
-        stateToSave = [{"medias": currState.socialMedias},
-                        {"profile": currState.profile}]
+        console.log("CurrentState", this.state.profile, this.state.socialMedias)
         if (validSave) {
-            firebaseApp.database().ref("/users/"+this.props.user.uid + "/profile/").update(this.state.profile);
+            firebaseApp.database().ref("/users/"+this.props.user.uid + "/profile/").set(this.state.profile);
             return firebaseApp.database().ref("/users/" + this.props.user.uid + "/medias/").set(this.state.socialMedias).then(() => {
-// =======
-//         if (validSave) {
-//             console.log("finalState", this.state)
-//             return firebaseApp.database().ref("/users/" + this.props.user.uid).update(this.state).then(() => {
-// >>>>>>> 0f817a96972b14c0c0fd6b0b2fc2674bbf3de73a
                 Alert.alert("Save Successful", "The adjusts you've made on your profile have been saved!");
                 this.props.navigation.navigate('Profile')
             })
@@ -389,22 +367,12 @@ class CreateCardScreen extends React.Component {
                         containerStyle={styles.primaryCard} >
 
                         {this.state.socialMedias.length == 0 ?
-// <<<<<<< HEAD
                             <Text style={{ textAlign: 'center', fontWeight: 'bold', paddingLeft: 10, paddingTop: 5, textAlignVertical: 'bottom' }}>Add social media link</Text>
-                            : <FlatList  data={this.state.socialMedias} extraData={this.state} keyExtractor={item => item.site} renderItem={({ item }) =>
+                            : <FlatList  data={this.state.socialMedias} extraData={this.state} keyExtractor={item => item.site} key={item => item.site} renderItem={({ item }) =>
                                 <TouchableOpacity onPress={() => this.handleExistingInteraction(item)} style={{ margin: 5, padding: 8, alignItems: 'center', backgroundColor: "#47ceff", borderColor: '#D0D0D0', borderRadius: 25, borderWidth: 2 }}>
                                     <Text style={{ color: '#FFF', fontWeight: "bold", fontSize: 20 }}>{item.site}</Text>
                                 </TouchableOpacity>
                             } />
-// =======
-//                             <TouchableOpacity style={{ flexDirection: 'row', justifyContent: 'center' }} onPress={() => this.handleAddLink()}>
-//                                 <Icon name='account-plus' type='material-community' />
-//                                 <Text style={{ textAlign: 'center', fontWeight: 'bold', paddingLeft: 10, paddingTop: 5, textAlignVertical: 'bottom' }}>Add social media link</Text>
-//                             </TouchableOpacity>
-//                             : <FlatList data={this.state.socialMedias} keyExtractor={item => item.name} renderItem={({ item }) => <Text>{item}</Text>} />
-
-
-// >>>>>>> 0f817a96972b14c0c0fd6b0b2fc2674bbf3de73a
                         }
                     </Card>
                 </View>

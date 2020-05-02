@@ -77,7 +77,7 @@ class CreateCardScreen extends React.Component {
     handleAddLink = this.handleAddLink.bind(this);
 
     handleAddLink() {
-
+        
     }
 
     handleProfileEdit(field, index) {

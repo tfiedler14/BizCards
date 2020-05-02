@@ -140,7 +140,7 @@ class CreateCardScreen extends React.Component {
                 <View style={styles.mediaContainer} >
                     <Card
                         containerStyle={styles.primaryCard} >
-                        {this.state.socialMedias.length != 0 ? <FlatList data={this.state.socialMedias} keyExtractor={item => item.name} renderItem={({ item }) => <CheckBox right iconRight title={item.name} key={item.name} onPress={() => this.handleClick(item.name)} checked={item.checked} />} />: 
+                        {this.state.socialMedias.length != 0 ? <FlatList data={this.state.socialMedias} keyExtractor={item => item.site} renderItem={({ item }) => <CheckBox right iconRight title={item.site} key={item.site} onPress={() => this.handleClick(item.site)} checked={item.checked} />} />: 
                         <Text style={{color: "#137AC2", padding: 5, fontWeight: "bold", textAlign: 'center'}}>Please add socialMedia links to enable bizCard customization</Text>
 }
 

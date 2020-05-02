@@ -35,7 +35,8 @@ class CreateCardScreen extends React.Component {
             addMediaDialog: false,
             addMediaInput: false,
             mediaInput: {},
-            pendingAdd: false
+            pendingAdd: false,
+            editActive: false
 
         }
     }
@@ -91,7 +92,8 @@ class CreateCardScreen extends React.Component {
     handleAddDomain = this.handleAddDomain.bind(this);
     handleCancelAdd = this.handleCancelAdd.bind(this);
     handleSaveLink = this.handleSaveLink.bind(this);
-    
+    handleExistingInteraction = this.handleExistingInteraction.bind(this);
+
     handleCancelAdd() {
         this.setState({
             addMediaDialog: false,
@@ -106,7 +108,7 @@ class CreateCardScreen extends React.Component {
         })
 
     }
-    handleAddDomain(domainKey, domainLink) {
+    handleAddDomain(domainKey, domainLink, edit) {
 
         console.log("made it to domain")
         temp = this.state.socialMedias
@@ -115,7 +117,8 @@ class CreateCardScreen extends React.Component {
         this.setState({
             addMediaInput: true,
             addMediaDialog: false,
-            mediaInput: insert
+            mediaInput: insert,
+            editActive: edit
         })
 
         console.log("curr", insert)
@@ -150,31 +153,65 @@ class CreateCardScreen extends React.Component {
         console.log("new State", this.state.profile)
 
     }
-    handleURLEdit(url){
-        input = {key: this.state.mediaInput["key"], link: url}
+    handleURLEdit(url) {
+        input = { key: this.state.mediaInput["key"], link: url }
         this.setState({
             pendingAdd: true,
             mediaInput: input
         })
     }
-    handleSaveLink(){
-        input = this.state.mediaInput
+    handleSaveLink() {
+        input = {site:this.state.mediaInput["key"] , link:this.state.mediaInput["link"], checked:false}
+        
+        console.log("input", input)
         medias = this.state.socialMedias
+        sites = medias.map(function (item) { return item.site; })
+        console.log("site", input["site"])
+        console.log(sites.indexOf(input["site"]))
+        if(sites.indexOf(input["site"]) >= 0){
+            var removeIndex = medias.map(function(item) { return item.site; }).indexOf(input["site"]);
+            medias.splice(removeIndex, 1)
+        }
         medias.push(input)
         this.setState({
             socialMedias: medias,
             pendingAdd: false,
             addMediaDialog: false,
             addMediaInput: false,
+            editActive:false,
             mediaInput: {}
         })
 
         alert("Your link has been successfully saved")
     }
 
+    handleDeleteLink(){
+        input = this.state.mediaInput
+        medias = this.state.socialMedias
+        var removeIndex = medias.map(function(item) { return item.site; }).indexOf(input["key"]);
+        // remove object
+        medias.splice(removeIndex, 1)
+        console.log(medias)
+
+        this.setState({
+            socialMedias: medias,
+            pendingAdd: false,
+            addMediaDialog: false,
+            addMediaInput: false,
+            mediaInput: {},
+            editActive: false,
+        })
+
+        alert("Your link has been successfully deleted")
+    }
+    handleExistingInteraction(existingLink) {
+        console.log(existingLink)
+        this.handleAddDomain(existingLink.site, existingLink.link, true)
+    }
+
     handleCancel = () => {
         console.log("Hit")
-        if(this.state.pendingAdd == true){
+        if (this.state.pendingAdd == true) {
             alert("you're not saving the new link")
         }
         this.props.navigation.goBack();
@@ -182,30 +219,50 @@ class CreateCardScreen extends React.Component {
 
     handleProfileSave() {
         temp = this.state.profile;
-        console.log(temp)
+        currState = this.state;
+        profileError = false;
         validSave = true
         if (temp[0].FullName.trim() == "") {
             validSave = false
+            profileError = true
+            console.log("FullName")
         }
         if (temp[1].Email.trim() == "") {
             validSave = false
+            profileError = true
+            console.log("Email")
+
         }
         if (temp[2].Mobile.trim() == "") {
             validSave = false
+            profileError = true
+            console.log("Mobile")
+
         }
         if (temp[3].Bio.trim() == "") {
             validSave = false
-        }
+            profileError = true
+            console.log("Bio")
 
+        }
+        if(currState.editActive == true || currState.pendingAdd == true){
+            validSave = false
+        }
+        stateToSave = [{"medias": currState.socialMedias},
+                        {"profile": currState.profile}]
         if (validSave) {
-            console.log("finalState", this.state)
-            return firebaseApp.database().ref("/users/" + this.props.user.uid).update(this.state).then(() => {
+            firebaseApp.database().ref("/users/"+this.props.user.uid + "/profile/").update(this.state.profile);
+            return firebaseApp.database().ref("/users/" + this.props.user.uid + "/medias/").set(this.state.socialMedias).then(() => {
                 Alert.alert("Save Successful", "The adjusts you've made on your profile have been saved!");
                 this.props.navigation.navigate('Profile')
             })
         } else {
-            Alert.alert("Save Unsuccessful", "Please make sure you have entered valid entries for all primary information fields!");
+            if(currState.editActive == true && profileError == false){
+                Alert.alert("Wait a minute!", "Please finish editing your current link before saving")
+            } else{
+                Alert.alert("Save Unsuccessful", "Please make sure you have entered valid entries for all primary information fields!");
 
+            }
         }
     }
 
@@ -275,7 +332,7 @@ class CreateCardScreen extends React.Component {
                                         initValue="Domain"
                                         keyExtractor={item => item.key}
                                         labelExtractor={item => item.key}
-                                        onChange={(option) => this.handleAddDomain(option.key, option.link)}
+                                        onChange={(option) => this.handleAddDomain(option.key, option.link, false)}
                                     />
                                 </View>
 
@@ -289,14 +346,30 @@ class CreateCardScreen extends React.Component {
                                     </TouchableOpacity>
                                 </View>
                                 <View style={{ flexDirection: 'column', alignItems: 'flex-start' }}>
-                                    <Text style={{ fontWeight: 'bold', fontSize: 15, textAlign: 'left', paddingBottom: 5}}>{this.state.mediaInput["key"]} profile URL:</Text>
-                                    <TextInput style={{borderBottomColor: "#D0D0D0"}} value={this.state.mediaInput["link"]} onChangeText={url => this.handleURLEdit(url)}></TextInput>
+                                    <Text style={{ fontWeight: 'bold', fontSize: 15, textAlign: 'left', paddingBottom: 5 }}>{this.state.mediaInput["key"]} profile URL:</Text>
+                                    <TextInput style={{ borderBottomColor: "#D0D0D0" }} value={this.state.mediaInput["link"]} onChangeText={url => this.handleURLEdit(url)}></TextInput>
                                 </View>
-                                <View style={{alignItems:'center'}} >
-                                    <TouchableOpacity style={{backgroundColor: "#032c8e", borderRadius:25, alignItems:'center'}} onPress={() => this.handleSaveLink()} >
-                                        <Text style={{textAlignVertical: 'center'}} > Save Link</Text>
-                                    </TouchableOpacity>
-                                </View>
+                                {this.state.editActive ?
+                                    <>
+                                        <View style={{ justifyContent:'center', flexDirection:"row" }} >
+                                            <TouchableOpacity style={{ padding: 3, backgroundColor: "#032c8e", borderRadius: 15, alignItems: 'center', margin:2 }} onPress={() => this.handleSaveLink()} >
+                                                <Text style={{ textAlignVertical: 'center', color:'#FFF'}} > Update Link</Text>
+                                            </TouchableOpacity>
+                                            <TouchableOpacity style={{padding:3, backgroundColor: "#e64940", borderRadius: 15, alignItems: 'center', margin:2  }} onPress={() => this.handleDeleteLink()} >
+                                                <Text style={{ textAlignVertical: 'center', color:'#FFF' }} > Delete Link</Text>
+                                            </TouchableOpacity>
+                                        </View>
+                                    </> :
+                                    <>
+                                        <View style={{ alignItems: 'center' }} >
+                                            <TouchableOpacity style={{ backgroundColor: "#032c8e", borderRadius: 25, alignItems: 'center' }} onPress={() => this.handleSaveLink()} >
+                                                <Text style={{ textAlignVertical: 'center' }} > Save Link</Text>
+                                            </TouchableOpacity>
+                                        </View>
+                                    </>
+                                }
+
+
                             </> : <></>}
 
                     </View>
@@ -308,7 +381,11 @@ class CreateCardScreen extends React.Component {
 
                         {this.state.socialMedias.length == 0 ?
                             <Text style={{ textAlign: 'center', fontWeight: 'bold', paddingLeft: 10, paddingTop: 5, textAlignVertical: 'bottom' }}>Add social media link</Text>
-                            : <FlatList data={this.state.socialMedias} keyExtractor={item => item.site} renderItem={({ item }) => <Text>{item.site}</Text>} />
+                            : <FlatList  data={this.state.socialMedias} extraData={this.state} keyExtractor={item => item.site} renderItem={({ item }) =>
+                                <TouchableOpacity onPress={() => this.handleExistingInteraction(item)} style={{ margin: 5, padding: 8, alignItems: 'center', backgroundColor: "#47ceff", borderColor: '#D0D0D0', borderRadius: 25, borderWidth: 2 }}>
+                                    <Text style={{ color: '#FFF', fontWeight: "bold", fontSize: 20 }}>{item.site}</Text>
+                                </TouchableOpacity>
+                            } />
                         }
                     </Card>
                 </View>

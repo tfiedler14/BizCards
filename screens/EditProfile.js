@@ -2,11 +2,10 @@ import React, { useState } from "react";
 import styled, { css } from "@emotion/native";
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
-import { StyleSheet, Text, Image, TextInput, TouchableOpacity, View, FlatList, Alert, KeyboardAvoidingView } from "react-native";
+import { StyleSheet, Text, Image, TextInput, TouchableOpacity, View, FlatList, Alert, ScrollView } from "react-native";
 import { Card, Icon } from 'react-native-elements';
 import * as firebaseApp from "firebase"
 import ModalSelector from 'react-native-modal-selector'
-
 
 
 class CreateCardScreen extends React.Component {
@@ -92,7 +91,6 @@ class CreateCardScreen extends React.Component {
         })
     }
     handleAddLink() {
-        // console.log(this.presetMedias)
         this.setState({
             addMediaDialog: true
         })
@@ -100,7 +98,6 @@ class CreateCardScreen extends React.Component {
     handleAddDomain(domainKey, domainLink, edit) {
 
         temp = this.state.socialMedias
-        // console.log("made it to domain", temp)
         insert = { key: domainKey, link: domainLink }
 
         userLink = ""
@@ -111,14 +108,11 @@ class CreateCardScreen extends React.Component {
             editActive: edit
         })
 
-        // console.log("curr", insert)
 
     }
 
     handleProfileEdit(field, index) {
-        // currState = this.state
         temp = this.state.profile
-        // console.log(temp)
 
         if (index == 0) {
             //fullname
@@ -141,7 +135,6 @@ class CreateCardScreen extends React.Component {
             profile: temp,
         })
 
-        // console.log("new State", this.state.profile)
 
     }
     handleURLEdit(url) {
@@ -154,11 +147,8 @@ class CreateCardScreen extends React.Component {
     handleSaveLink() {
         input = { site: this.state.mediaInput["key"], link: this.state.mediaInput["link"], checked: false }
 
-        // console.log("input", input)
         medias = this.state.socialMedias
         sites = medias.map(function (item) { return item.site; })
-        // console.log("site", input["site"])
-        // console.log(sites.indexOf(input["site"]))
         if (sites.indexOf(input["site"]) >= 0) {
             var removeIndex = medias.map(function (item) { return item.site; }).indexOf(input["site"]);
             medias.splice(removeIndex, 1)
@@ -263,10 +253,15 @@ class CreateCardScreen extends React.Component {
 
     render() {
         return (
-            <View style={styles.container}>
+            <ScrollView style={styles.scrollContainer}>
                 <Titlebar>
                     <Avatar source={require("../assets/profile.png")} />
-                    <TouchableOpacity onPress={() => this.props.navigation.navigate('Profile')}>
+                    <TouchableOpacity onPress={() => this.props.navigation.navigate({
+                        routeName: 'Profile',
+                        params: {
+                            userUid: this.props.user.uid
+                        }
+                    })}>
                         <Title>Cancel</Title>
                     </TouchableOpacity>
                 </Titlebar>
@@ -276,9 +271,6 @@ class CreateCardScreen extends React.Component {
                         titleStyle={{ color: '#137AC2' }}
                         containerStyle={styles.primaryCard} >
                         <View style={{ flexDirection: 'row' }} >
-                            <Image source={require("../assets/defaultProfPic.png")}
-                                style={{ top: 5, left: 0, width: 65, height: 65, resizeMode: 'contain', borderRadius: 15 }}>
-                            </Image>
                             <View style={{ flexDirection: 'column', }} >
                                 <View style={{ flexDirection: 'row', }} >
                                     <Text style={{ color: '#137AC2', textAlignVertical: 'center', left: 0 }}>Full Name: </Text>
@@ -363,8 +355,6 @@ class CreateCardScreen extends React.Component {
                                         </View>
                                     </>
                                 }
-
-
                             </> : <></>}
 
                     </View>
@@ -387,7 +377,7 @@ class CreateCardScreen extends React.Component {
                 <TouchableOpacity style={styles.saveBtn} onPress={() => this.handleProfileSave()}>
                     <Text style={styles.saveText}>Save Profile</Text>
                 </TouchableOpacity>
-            </View>
+            </ScrollView>
         );
     }
 
@@ -472,7 +462,7 @@ const styles = StyleSheet.create({
         marginBottom: 0,
     },
     saveBtn: {
-        position: 'absolute',
+        // position: 'absolute',
         bottom: 15,
         width: "80%",
         backgroundColor: "#137AC2",
@@ -487,9 +477,10 @@ const styles = StyleSheet.create({
     saveText: {
         color: "white"
     },
-    avoidingContainer: {
-        flex: 1,
-    }
+    scrollContainer: {
+        flexGrow: 1,
+        flexDirection: 'column'
+    },
 });
 
 const mapDispatchToProps = dispatch => {

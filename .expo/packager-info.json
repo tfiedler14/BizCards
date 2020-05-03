@@ -3,8 +3,8 @@
   "expoServerPort": null,
   "packagerPort": null,
   "packagerPid": null,
-  "expoServerNgrokUrl": "https://nb-4yb.anonymous.bizcards.exp.direct",
-  "packagerNgrokUrl": "https://packager.nb-4yb.anonymous.bizcards.exp.direct",
-  "ngrokPid": 72726,
+  "expoServerNgrokUrl": null,
+  "packagerNgrokUrl": null,
+  "ngrokPid": null,
   "webpackServerPort": null
 }

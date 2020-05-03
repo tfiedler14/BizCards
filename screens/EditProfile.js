@@ -2,15 +2,9 @@ import React, { useState } from "react";
 import styled, { css } from "@emotion/native";
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
-<<<<<<< HEAD
-import { StyleSheet, Text, Image, TextInput, TouchableOpacity, View, FlatList, Alert } from "react-native";
-=======
 import { StyleSheet, Text, Image, TextInput, TouchableOpacity, View, FlatList, Alert, KeyboardAvoidingView } from "react-native";
->>>>>>> 0f817a96972b14c0c0fd6b0b2fc2674bbf3de73a
-import { Card, CheckBox, Icon } from 'react-native-elements';
+import { Card, Icon } from 'react-native-elements';
 import * as firebaseApp from "firebase"
-import moment from 'moment';
-import Dialog from "react-native-dialog";
 import ModalSelector from 'react-native-modal-selector'
 
 
@@ -70,23 +64,13 @@ class CreateCardScreen extends React.Component {
                     time = child.val()
                 }
             })
-            console.log("nestedPro", loadprofile)
             this.setState({
                 profile: loadprofile,
                 socialMedias: loadsocialMedias,
                 timeStamp: time
             })
-            console.log(this.state)
-
-            console.log("IP", this.state.profile[0].FullName)
-            console.log("nestedMed", loadsocialMedias)
 
         })
-
-        console.log("profile", loadprofile)
-        console.log("medias", loadsocialMedias)
-
-        console.log("state", this.state)
 
     }
 
@@ -102,22 +86,23 @@ class CreateCardScreen extends React.Component {
         this.setState({
             addMediaDialog: false,
             addMediaInput: false,
+            pendingAdd: false,
+            editActive: false,
             mediaInput: {}
         })
     }
     handleAddLink() {
-        console.log(this.presetMedias)
+        // console.log(this.presetMedias)
         this.setState({
             addMediaDialog: true
         })
-
-<<<<<<< HEAD
     }
     handleAddDomain(domainKey, domainLink, edit) {
 
-        console.log("made it to domain")
         temp = this.state.socialMedias
+        // console.log("made it to domain", temp)
         insert = { key: domainKey, link: domainLink }
+
         userLink = ""
         this.setState({
             addMediaInput: true,
@@ -126,17 +111,14 @@ class CreateCardScreen extends React.Component {
             editActive: edit
         })
 
-        console.log("curr", insert)
-=======
-    handleAddLink() {
-        
->>>>>>> 0f817a96972b14c0c0fd6b0b2fc2674bbf3de73a
+        // console.log("curr", insert)
+
     }
 
     handleProfileEdit(field, index) {
         // currState = this.state
         temp = this.state.profile
-        console.log(temp)
+        // console.log(temp)
 
         if (index == 0) {
             //fullname
@@ -159,7 +141,7 @@ class CreateCardScreen extends React.Component {
             profile: temp,
         })
 
-        console.log("new State", this.state.profile)
+        // console.log("new State", this.state.profile)
 
     }
     handleURLEdit(url) {
@@ -170,15 +152,15 @@ class CreateCardScreen extends React.Component {
         })
     }
     handleSaveLink() {
-        input = {site:this.state.mediaInput["key"] , link:this.state.mediaInput["link"], checked:false}
-        
-        console.log("input", input)
+        input = { site: this.state.mediaInput["key"], link: this.state.mediaInput["link"], checked: false }
+
+        // console.log("input", input)
         medias = this.state.socialMedias
         sites = medias.map(function (item) { return item.site; })
-        console.log("site", input["site"])
-        console.log(sites.indexOf(input["site"]))
-        if(sites.indexOf(input["site"]) >= 0){
-            var removeIndex = medias.map(function(item) { return item.site; }).indexOf(input["site"]);
+        // console.log("site", input["site"])
+        // console.log(sites.indexOf(input["site"]))
+        if (sites.indexOf(input["site"]) >= 0) {
+            var removeIndex = medias.map(function (item) { return item.site; }).indexOf(input["site"]);
             medias.splice(removeIndex, 1)
         }
         medias.push(input)
@@ -187,20 +169,20 @@ class CreateCardScreen extends React.Component {
             pendingAdd: false,
             addMediaDialog: false,
             addMediaInput: false,
-            editActive:false,
+            editActive: false,
             mediaInput: {}
         })
 
         alert("Your link has been successfully saved")
     }
 
-    handleDeleteLink(){
+    handleDeleteLink() {
         input = this.state.mediaInput
         medias = this.state.socialMedias
-        var removeIndex = medias.map(function(item) { return item.site; }).indexOf(input["key"]);
+        var removeIndex = medias.map(function (item) { return item.site; }).indexOf(input["key"]);
         // remove object
         medias.splice(removeIndex, 1)
-        console.log(medias)
+        // console.log(medias)
 
         this.setState({
             socialMedias: medias,
@@ -214,12 +196,12 @@ class CreateCardScreen extends React.Component {
         alert("Your link has been successfully deleted")
     }
     handleExistingInteraction(existingLink) {
-        console.log(existingLink)
+        // console.log(existingLink)
         this.handleAddDomain(existingLink.site, existingLink.link, true)
     }
 
     handleCancel = () => {
-        console.log("Hit")
+        // console.log("Hit")
         if (this.state.pendingAdd == true) {
             alert("you're not saving the new link")
         }
@@ -234,47 +216,45 @@ class CreateCardScreen extends React.Component {
         if (temp[0].FullName.trim() == "") {
             validSave = false
             profileError = true
-            console.log("FullName")
+            // console.log("FullName")
         }
         if (temp[1].Email.trim() == "") {
             validSave = false
             profileError = true
-            console.log("Email")
+            // console.log("Email")
 
         }
         if (temp[2].Mobile.trim() == "") {
             validSave = false
             profileError = true
-            console.log("Mobile")
+            // console.log("Mobile")
 
         }
         if (temp[3].Bio.trim() == "") {
             validSave = false
             profileError = true
-            console.log("Bio")
+            // console.log("Bio")
 
-<<<<<<< HEAD
         }
-        if(currState.editActive == true || currState.pendingAdd == true){
+        if (currState.editActive == true || currState.pendingAdd == true) {
             validSave = false
         }
-        stateToSave = [{"medias": currState.socialMedias},
-                        {"profile": currState.profile}]
+        // console.log("CurrentState", this.state.profile, this.state.socialMedias)
         if (validSave) {
-            firebaseApp.database().ref("/users/"+this.props.user.uid + "/profile/").update(this.state.profile);
+            firebaseApp.database().ref("/users/" + this.props.user.uid + "/profile/").set(this.state.profile);
             return firebaseApp.database().ref("/users/" + this.props.user.uid + "/medias/").set(this.state.socialMedias).then(() => {
-=======
-        if (validSave) {
-            console.log("finalState", this.state)
-            return firebaseApp.database().ref("/users/" + this.props.user.uid).update(this.state).then(() => {
->>>>>>> 0f817a96972b14c0c0fd6b0b2fc2674bbf3de73a
                 Alert.alert("Save Successful", "The adjusts you've made on your profile have been saved!");
-                this.props.navigation.navigate('Profile')
+                this.props.navigation.navigate({
+                    routeName: 'Profile',
+                    params: {
+                        userUid: this.props.user.uid
+                    }
+                })
             })
         } else {
-            if(currState.editActive == true && profileError == false){
+            if (currState.editActive == true && profileError == false) {
                 Alert.alert("Wait a minute!", "Please finish editing your current link before saving")
-            } else{
+            } else {
                 Alert.alert("Save Unsuccessful", "Please make sure you have entered valid entries for all primary information fields!");
 
             }
@@ -303,19 +283,19 @@ class CreateCardScreen extends React.Component {
                                 <View style={{ flexDirection: 'row', }} >
                                     <Text style={{ color: '#137AC2', textAlignVertical: 'center', left: 0 }}>Full Name: </Text>
                                     <TouchableOpacity style={{ backgroundColor: '#FFF', borderColor: '#000', right: 0 }}>
-                                        <TextInput containerStyle={{ width: '100%' }} value={this.state.profile[0].FullName} onChangeText={fullName => this.handleProfileEdit(fullName, 0)} />
+                                        <TextInput containerStyle={{ padding: 2, margin: 2, width: '100%' }} value={this.state.profile[0].FullName} onChangeText={fullName => this.handleProfileEdit(fullName, 0)} />
                                     </TouchableOpacity>
                                 </View>
                                 <View style={{ flexDirection: 'row' }} >
                                     <Text style={{ color: '#137AC2', textAlignVertical: 'center' }}>Email: </Text>
                                     <TouchableOpacity >
-                                        <TextInput containerStyle={{ width: '100%', alignSelf: 'flex-end' }} value={this.state.profile[1].Email} onChangeText={Email => this.handleProfileEdit(Email, 1)} />
+                                        <TextInput containerStyle={{ padding: 2, margin: 2, width: '100%', alignSelf: 'flex-end' }} value={this.state.profile[1].Email} onChangeText={Email => this.handleProfileEdit(Email, 1)} />
                                     </TouchableOpacity>
                                 </View>
                                 <View style={{ flexDirection: 'row' }} >
                                     <Text style={{ color: '#137AC2', textAlignVertical: 'center' }}>Mobile: </Text>
                                     <TouchableOpacity >
-                                        <TextInput containerStyle={{ width: '100%', alignSelf: 'flex-end' }} keyboardType={'name-phone-pad'} value={this.state.profile[2].Mobile} onChangeText={Mobile => this.handleProfileEdit(Mobile, 2)} />
+                                        <TextInput containerStyle={{ padding: 2, margin: 2, width: '100%', alignSelf: 'flex-end' }} keyboardType={'phone-pad'} value={this.state.profile[2].Mobile} onChangeText={Mobile => this.handleProfileEdit(Mobile, 2)} />
                                     </TouchableOpacity>
                                 </View>
                                 <View style={{ flexDirection: 'row' }} >
@@ -366,19 +346,19 @@ class CreateCardScreen extends React.Component {
                                 </View>
                                 {this.state.editActive ?
                                     <>
-                                        <View style={{ justifyContent:'center', flexDirection:"row" }} >
-                                            <TouchableOpacity style={{ padding: 3, backgroundColor: "#032c8e", borderRadius: 15, alignItems: 'center', margin:2 }} onPress={() => this.handleSaveLink()} >
-                                                <Text style={{ textAlignVertical: 'center', color:'#FFF'}} > Update Link</Text>
+                                        <View style={{ justifyContent: 'center', flexDirection: "row" }} >
+                                            <TouchableOpacity style={{ padding: 3, backgroundColor: "#032c8e", borderRadius: 15, alignItems: 'center', margin: 2 }} onPress={() => this.handleSaveLink()} >
+                                                <Text style={{ textAlignVertical: 'center', color: '#FFF' }} > Update Link</Text>
                                             </TouchableOpacity>
-                                            <TouchableOpacity style={{padding:3, backgroundColor: "#e64940", borderRadius: 15, alignItems: 'center', margin:2  }} onPress={() => this.handleDeleteLink()} >
-                                                <Text style={{ textAlignVertical: 'center', color:'#FFF' }} > Delete Link</Text>
+                                            <TouchableOpacity style={{ padding: 3, backgroundColor: "#e64940", borderRadius: 15, alignItems: 'center', margin: 2 }} onPress={() => this.handleDeleteLink()} >
+                                                <Text style={{ textAlignVertical: 'center', color: '#FFF' }} > Delete Link</Text>
                                             </TouchableOpacity>
                                         </View>
                                     </> :
                                     <>
                                         <View style={{ alignItems: 'center' }} >
-                                            <TouchableOpacity style={{ backgroundColor: "#032c8e", borderRadius: 25, alignItems: 'center' }} onPress={() => this.handleSaveLink()} >
-                                                <Text style={{ textAlignVertical: 'center' }} > Save Link</Text>
+                                            <TouchableOpacity style={{ padding: 3, backgroundColor: "#032c8e", borderRadius: 15, alignItems: 'center', margin: 2 }} onPress={() => this.handleSaveLink()} >
+                                                <Text style={{ textAlignVertical: 'center', color: '#FFF' }} > Save Link</Text>
                                             </TouchableOpacity>
                                         </View>
                                     </>
@@ -395,30 +375,18 @@ class CreateCardScreen extends React.Component {
                         containerStyle={styles.primaryCard} >
 
                         {this.state.socialMedias.length == 0 ?
-<<<<<<< HEAD
                             <Text style={{ textAlign: 'center', fontWeight: 'bold', paddingLeft: 10, paddingTop: 5, textAlignVertical: 'bottom' }}>Add social media link</Text>
-                            : <FlatList  data={this.state.socialMedias} extraData={this.state} keyExtractor={item => item.site} renderItem={({ item }) =>
+                            : <FlatList data={this.state.socialMedias} extraData={this.state} keyExtractor={item => item.site} key={item => item.site} renderItem={({ item }) =>
                                 <TouchableOpacity onPress={() => this.handleExistingInteraction(item)} style={{ margin: 5, padding: 8, alignItems: 'center', backgroundColor: "#47ceff", borderColor: '#D0D0D0', borderRadius: 25, borderWidth: 2 }}>
                                     <Text style={{ color: '#FFF', fontWeight: "bold", fontSize: 20 }}>{item.site}</Text>
                                 </TouchableOpacity>
                             } />
-=======
-                            <TouchableOpacity style={{ flexDirection: 'row', justifyContent: 'center' }} onPress={() => this.handleAddLink()}>
-                                <Icon name='account-plus' type='material-community' />
-                                <Text style={{ textAlign: 'center', fontWeight: 'bold', paddingLeft: 10, paddingTop: 5, textAlignVertical: 'bottom' }}>Add social media link</Text>
-                            </TouchableOpacity>
-                            : <FlatList data={this.state.socialMedias} keyExtractor={item => item.name} renderItem={({ item }) => <Text>{item}</Text>} />
-
-
->>>>>>> 0f817a96972b14c0c0fd6b0b2fc2674bbf3de73a
                         }
                     </Card>
                 </View>
-                <KeyboardAvoidingView style={styles.avoidingContainer} >
-                    <TouchableOpacity style={styles.saveBtn} onPress={() => this.handleProfileSave()}>
-                        <Text style={styles.saveText}>Save Profile</Text>
-                    </TouchableOpacity>
-                </KeyboardAvoidingView>
+                <TouchableOpacity style={styles.saveBtn} onPress={() => this.handleProfileSave()}>
+                    <Text style={styles.saveText}>Save Profile</Text>
+                </TouchableOpacity>
             </View>
         );
     }

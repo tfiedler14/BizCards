@@ -2,7 +2,7 @@ import React from "react";
 import styled, { css } from "@emotion/native";
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
-import { StyleSheet, Text, Image, TextInput, TouchableOpacity, View, FlatList } from "react-native";
+import { StyleSheet, Text, Image, TextInput, TouchableOpacity, View, FlatList, Alert} from "react-native";
 import { Card, CheckBox } from 'react-native-elements';
 import * as firebaseApp from "firebase"
 import Profile from "./Profile";
@@ -75,21 +75,25 @@ class CreateCardScreen extends React.Component {
     handleClick = this.handleClick.bind(this);
     listenForUser = this.listenForUser.bind(this);
     handleProfileClick = this.handleProfileClick.bind(this);
+    handleProfileSave = this.handleProfileSave.bind(this);
 
     handleClick(name) {
         console.log(name)
-        const data = this.state.data;
-        const index = data.findIndex(x => x.name === name);
+        const data = this.state.socialMedias;
+        console.log("data", data)
+        const index = data.findIndex(x => x.site === name);
         data[index].checked = !data[index].checked;
-        this.setState(data);
+        this.setState({
+            socialMedias: data
+        });
     }
 
-    handleProfileClick(field){
+    handleProfileClick(field) {
         temp = this.state.profile
-        if(field == this.state.profile[1]){
+        if (field == this.state.profile[1]) {
             temp[1].checked = !field.checked
         }
-        if(field == this.state.profile[2]){
+        if (field == this.state.profile[2]) {
             temp[2].checked = !field.checked
         }
         this.setState({
@@ -104,13 +108,28 @@ class CreateCardScreen extends React.Component {
         this.props.navigation.goBack();
     }
 
+    handleProfileSave() {
+        temp = this.state.profile;
+        currState = this.state;
+        profileError = false;
+        validSave = true
+        console.log("Landed", this.state.profile, this.state.socialMedias)
+
+        firebaseApp.database().ref("/users/" + this.props.user.uid + "/profile/").set(this.state.profile);
+        return firebaseApp.database().ref("/users/" + this.props.user.uid + "/medias/").set(this.state.socialMedias).then(() => {
+            Alert.alert("Save Successful", "The adjusts you've made on your profile have been saved!");
+            this.props.navigation.navigate('Profile')
+        })
+
+    }
+
     render() {
         return (
             <View style={styles.container}>
                 <Titlebar>
                     <Avatar source={require("../assets/profile.png")} />
-                    <TouchableOpacity 
-                    onPress={() => this.props.navigation.navigate('Profile')}>
+                    <TouchableOpacity
+                        onPress={() => this.props.navigation.navigate('Profile')}>
                         <Title>Cancel</Title>
                     </TouchableOpacity>
                 </Titlebar>
@@ -124,9 +143,10 @@ class CreateCardScreen extends React.Component {
                                 style={{ top: 30, left: 0, width: 65, height: 65, resizeMode: 'contain', borderRadius: 15 }}>
                             </Image>
                             <View style={{ flexDirection: 'column' }} >
-                            <CheckBox containerStyle={{ width: '100%', alignSelf: 'flex-end' }} right iconRight title={<Text style={{padding: 5, fontWeight: "bold", textAlign: 'center'}}>{this.state.profile[0].FullName}</Text>} checked={true} />
-                                <CheckBox containerStyle={{ width: '100%', alignSelf: 'flex-end' }} right iconRight title={<Text style={{padding: 5, fontWeight: "bold", }}>{this.state.profile[1].Email}</Text>} onPress={() => this.handleProfileClick(this.state.profile[1])} checked={this.state.profile[1].checked} />
-                                <CheckBox containerStyle={{ width: '100%', alignSelf: 'flex-end' }} right iconRight title={<Text style={{padding: 5, fontWeight: "bold", }}>{this.state.profile[2].Mobile}</Text>} onPress={() => this.handleProfileClick(this.state.profile[2])} checked={this.state.profile[2].checked} />
+                                <CheckBox containerStyle={{ width: '100%', alignSelf: 'flex-end' }} right iconRight title={<Text style={{ padding: 5, fontWeight: "bold", textAlign: 'center' }}>{this.state.profile[0].FullName}</Text>} checked={true} />
+                                <CheckBox containerStyle={{ width: '100%', alignSelf: 'flex-end' }} right iconRight title={<Text style={{ padding: 5, fontWeight: "bold", }}>{this.state.profile[1].Email}</Text>} onPress={() => this.handleProfileClick(this.state.profile[1])} checked={this.state.profile[1].checked} />
+                                <CheckBox containerStyle={{ width: '100%', alignSelf: 'flex-end' }} right iconRight title={<Text style={{ padding: 5, fontWeight: "bold", }}>{this.state.profile[2].Mobile}</Text>} onPress={() => this.handleProfileClick(this.state.profile[2])} checked={this.state.profile[2].checked} />
+                                <CheckBox containerStyle={{ width: '100%', alignSelf: 'flex-end' }} right iconRight title={<Text style={{ padding: 5, fontWeight: "bold", }}>{this.state.profile[3].Bio}</Text>} onPress={() => this.handleProfileClick(this.state.profile[3])} checked={this.state.profile[3].checked} />
                             </View>
                         </View>
 
@@ -140,13 +160,13 @@ class CreateCardScreen extends React.Component {
                 <View style={styles.mediaContainer} >
                     <Card
                         containerStyle={styles.primaryCard} >
-                        {this.state.socialMedias.length != 0 ? <FlatList data={this.state.socialMedias} keyExtractor={item => item.site} renderItem={({ item }) => <CheckBox right iconRight title={item.site} key={item.site} onPress={() => this.handleClick(item.site)} checked={item.checked} />} />: 
-                        <Text style={{color: "#137AC2", padding: 5, fontWeight: "bold", textAlign: 'center'}}>Please add socialMedia links to enable bizCard customization</Text>
-}
+                        {this.state.socialMedias.length != 0 ? <FlatList data={this.state.socialMedias} extraData={this.state} keyExtractor={item => item.site} renderItem={({ item }) => <CheckBox right iconRight title={item.site} key={item.site} onPress={() => this.handleClick(item.site)} checked={item.checked} />} /> :
+                            <Text style={{ color: "#137AC2", padding: 5, fontWeight: "bold", textAlign: 'center' }}>Please add socialMedia links to enable bizCard customization</Text>
+                        }
 
                     </Card>
 
-                    <TouchableOpacity style={styles.saveBtn} onPress={() => this.props.navigation.navigate('Home')}>
+                    <TouchableOpacity style={styles.saveBtn} onPress={() => this.handleProfileSave()}>
                         <Text style={styles.saveText}>Save Card</Text>
                     </TouchableOpacity>
                 </View>
@@ -220,7 +240,7 @@ const styles = StyleSheet.create({
         marginBottom: 0,
     },
     saveBtn: {
-        position:'absolute',
+        position: 'absolute',
         bottom: 15,
         width: "80%",
         backgroundColor: "#137AC2",

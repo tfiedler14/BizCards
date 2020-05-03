@@ -1,7 +1,7 @@
 import React from 'react'
 import styled, { css } from "@emotion/native"
 import { QRCode } from 'react-native-custom-qr-codes-expo';
-import { View, Text, StyleSheet, Image, TouchableOpacity, ActivityIndicator } from 'react-native'
+import { View, Text, StyleSheet, Image, TouchableOpacity, ActivityIndicator, FlatList, ScrollView } from 'react-native'
 import { Card, CheckBox } from 'react-native-elements';
 import { connect } from 'react-redux'
 import { FloatingAction } from "react-native-floating-action";
@@ -138,39 +138,57 @@ class Profile extends React.Component {
 					<Avatar source={require("../assets/profile.png")} />
 					<Title>Welcome back,</Title>
 					<Name>{this.props.user.name}</Name>
-
 				</Titlebar>
+				<ScrollView style={styles.scrollContainer}>
 				<View >
 					<Card
 						title='Current Card'
 						titleStyle={{ color: '#137AC2' }}
-						containerStyle={styles.primaryCard} >
-						<View style={{ flexDirection: 'row', justifyContent: 'space-between' }} >
-							<View style={styles.imageContainer}>
-								<Image
-									source={require("../assets/defaultProfPic.png")}
-									style={styles.imageView}>
-								</Image>
+						containerStyle={styles.primaryCard}
+					>
+						<ScrollView style={styles.scrollContainer}>
+							<View style={{ flexDirection: 'row', justifyContent: 'space-between' }} >
+								<View style={styles.imageContainer}>
+									<Image
+										source={require("../assets/defaultProfPic.png")}
+										style={styles.imageView}>
+									</Image>
+								</View>
+								<View style={{ flexDirection: 'column', alignItems: 'flex-start' }} >
+									<View style={styles.cardStyle}>
+										<Text style={styles.text}>Email: </Text>
+										<Text style={{ fontWeight: "bold", }}>{this.state.profile[1].Email}</Text>
+									</View>
+									<View style={styles.cardStyle}>
+										<Text style={styles.text} >Mobile: </Text>
+										<Text style={{ fontWeight: "bold", }}>{this.state.profile[2].Mobile}</Text>
+									</View>
+									<View style={styles.cardStyle}>
+										<Text style={styles.text}  >Bio: </Text>
+										<Text style={{ fontWeight: "bold", }}>{this.state.profile[3].Bio}</Text>
+									</View>
+
+									<View style={styles.cardStyle}>
+										<Text style={styles.text} >Social Media: </Text>
+										{(this.state.socialMedias.length === 0) ?
+											(<Text>Nothing to display</Text>)
+											:
+											(<FlatList data={this.state.socialMedias} extraData={this.state} keyExtractor={item => item.site} key={item => item.site} renderItem={({ item }) =>
+												<TouchableOpacity onPress={() => { WebBrowser.openBrowserAsync(item.link) }} style={{ margin: 5, padding: 8, alignItems: 'center', backgroundColor: "#47ceff", borderColor: '#D0D0D0', borderRadius: 10, borderWidth: 1 }}>
+														<Text style={{ color: '#FFF', fontWeight: "bold", fontSize: 12 }}>{item.site}</Text>
+												</TouchableOpacity>
+
+											} />)
+										}
+									</View>
+
+								</View>
 							</View>
-							<View style={{ flexDirection: 'column', alignItems: 'flex-start' }} >
-								<View style={styles.cardStyle}>
-									<Text style={styles.text}>Email: </Text>
-									<Text style={{ fontWeight: "bold", }}>{this.state.profile[1].Email}</Text>
-								</View>
-								<View style={styles.cardStyle}>
-									<Text style={styles.text} >Mobile: </Text>
-									<Text style={{ fontWeight: "bold", }}>{this.state.profile[2].Mobile}</Text>
-								</View>
-								<View style={styles.cardStyle}>
-									<Text style={styles.text}  >Bio: </Text>
-									<Text style={{ fontWeight: "bold", }}>{this.state.profile[3].Bio}</Text>
-								</View>
-							</View>
-						</View>
+						</ScrollView>
 					</Card>
 				</View>
-				<View >
-					<QRCodeBlock style={styles.qrcodeContainer} >
+				<View style={styles.qrcodeContainer}>
+					<QRCodeBlock >
 						<TouchableOpacity onPress={this._handlePressButtonAsync}>
 							<QRCode
 								logo={require("../assets/profile.png")}
@@ -195,6 +213,7 @@ class Profile extends React.Component {
 					<AddIcon source={require("../assets/gear.png")} />
 				</TouchableOpacity>
 				<FloatingAction
+					style={{marginLeft: 30}}
 					actions={actions}
 					color="#032c8e"
 					overlayColor="rgba(244, 244, 255, 0.6)"
@@ -207,7 +226,8 @@ class Profile extends React.Component {
 							})
 					}}
 				/>
-			</Container>
+				</ScrollView>
+			</Container >
 		)
 
 	}
@@ -280,6 +300,10 @@ const styles = StyleSheet.create({
 	},
 	qrcodeContainer: {
 		alignItems: 'center',
+		justifyContent: 'center',
+		marginLeft: 150,
+		height:"15%",
+		width: "15%",
 	},
 	loading: {
 		flex: 1,
@@ -293,6 +317,7 @@ const styles = StyleSheet.create({
 		borderRadius: 8,
 		padding: 10,
 		margin: 10,
+		height: "65%"
 	},
 	cardStyle: {
 		flex: 1,
@@ -301,9 +326,10 @@ const styles = StyleSheet.create({
 		justifyContent: 'flex-start'
 	},
 	imageView: {
-		alignItems: 'flex-end',
-		justifyContent: 'flex-end',
+		alignItems: 'center',
+		justifyContent: 'center',
 		left: 0,
+		marginBottom: 40,
 		width: 90,
 		height: 90,
 		resizeMode: 'contain',
@@ -320,7 +346,17 @@ const styles = StyleSheet.create({
 	},
 	socialMedia: {
 		flexDirection: 'column',
-	}
+	},
+	socialCardStyle: {
+		flex: 1,
+		flexDirection: 'column',
+		alignItems: 'flex-start',
+		justifyContent: 'flex-start',
+	},
+	scrollContainer: {
+		flexGrow: 1,
+		flexDirection: 'column'
+	},
 })
 
 const mapStateToProps = state => {

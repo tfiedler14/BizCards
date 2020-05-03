@@ -2,11 +2,10 @@ import React, { useState } from "react";
 import styled, { css } from "@emotion/native";
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
-import { StyleSheet, Text, Image, TextInput, TouchableOpacity, View, FlatList, Alert, KeyboardAvoidingView } from "react-native";
+import { StyleSheet, Text, Image, TextInput, TouchableOpacity, View, FlatList, Alert, ScrollView } from "react-native";
 import { Card, Icon } from 'react-native-elements';
 import * as firebaseApp from "firebase"
 import ModalSelector from 'react-native-modal-selector'
-
 
 
 class CreateCardScreen extends React.Component {
@@ -263,10 +262,15 @@ class CreateCardScreen extends React.Component {
 
     render() {
         return (
-            <View style={styles.container}>
+            <ScrollView style={styles.scrollContainer}>
                 <Titlebar>
                     <Avatar source={require("../assets/profile.png")} />
-                    <TouchableOpacity onPress={() => this.props.navigation.navigate('Profile')}>
+                    <TouchableOpacity onPress={() => this.props.navigation.navigate({
+                        routeName: 'Profile',
+                        params: {
+                            userUid: this.props.user.uid
+                        }
+                    })}>
                         <Title>Cancel</Title>
                     </TouchableOpacity>
                 </Titlebar>
@@ -363,8 +367,6 @@ class CreateCardScreen extends React.Component {
                                         </View>
                                     </>
                                 }
-
-
                             </> : <></>}
 
                     </View>
@@ -387,7 +389,7 @@ class CreateCardScreen extends React.Component {
                 <TouchableOpacity style={styles.saveBtn} onPress={() => this.handleProfileSave()}>
                     <Text style={styles.saveText}>Save Profile</Text>
                 </TouchableOpacity>
-            </View>
+            </ScrollView>
         );
     }
 
@@ -472,7 +474,7 @@ const styles = StyleSheet.create({
         marginBottom: 0,
     },
     saveBtn: {
-        position: 'absolute',
+        // position: 'absolute',
         bottom: 15,
         width: "80%",
         backgroundColor: "#137AC2",
@@ -487,9 +489,10 @@ const styles = StyleSheet.create({
     saveText: {
         color: "white"
     },
-    avoidingContainer: {
-        flex: 1,
-    }
+    scrollContainer: {
+        flexGrow: 1,
+        flexDirection: 'column'
+    },
 });
 
 const mapDispatchToProps = dispatch => {

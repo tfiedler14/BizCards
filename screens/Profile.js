@@ -134,18 +134,35 @@ class Profile extends React.Component {
 
 		return (
 			<Container>
-				<Titlebar>
-					<Avatar source={require("../assets/profile.png")} />
-					<Title>Welcome back,</Title>
-					<Name>{this.props.user.name}</Name>
-				</Titlebar>
-				<ScrollView style={styles.scrollContainer}>
-				<View >
-					<Card
-						title='Current Card'
-						titleStyle={{ color: '#137AC2' }}
-						containerStyle={styles.primaryCard}
+				<View style={{flexDirection: 'row'}}>
+					<Titlebar>
+						<Avatar source={require("../assets/profile.png")} />
+						<Title>Welcome back,</Title>
+						<Name>{this.props.user.name}</Name>
+					</Titlebar>
+					<TouchableOpacity
+						onPress={() => this.props.navigation.navigate('Settings')}
+						style={{
+							alignItems: 'center',
+							justifyContent: 'center',
+							width: 70,
+							position: 'absolute',
+							top: 40,
+							right: 10,
+							height: 70,
+						}}
 					>
+						<AddIcon source={require("../assets/gear.png")} />
+					</TouchableOpacity>
+				</View>
+
+				<ScrollView style={styles.scrollContainer}>
+					<View >
+						<Card
+							title='Current Card'
+							titleStyle={{ color: '#137AC2' }}
+							containerStyle={styles.primaryCard}
+						>
 							<View style={{ flexDirection: 'row', justifyContent: 'space-between' }} >
 								<View style={styles.imageContainer}>
 									<Image
@@ -173,54 +190,40 @@ class Profile extends React.Component {
 											:
 											(<FlatList data={this.state.socialMedias} extraData={this.state} keyExtractor={item => item.site} key={item => item.site} renderItem={({ item }) =>
 												<TouchableOpacity onPress={() => { WebBrowser.openBrowserAsync(item.link) }} style={{ margin: 5, padding: 8, alignItems: 'center', backgroundColor: "#47ceff", borderColor: '#D0D0D0', borderRadius: 10, borderWidth: 1 }}>
-														<Text style={{ color: '#FFF', fontWeight: "bold", fontSize: 12 }}>{item.site}</Text>
+													<Text style={{ color: '#FFF', fontWeight: "bold", fontSize: 12 }}>{item.site}</Text>
 												</TouchableOpacity>
 											} />)
 										}
 									</View>
 								</View>
 							</View>
-					</Card>
-				</View>
-				<View style={styles.qrcodeContainer}>
-					<QRCodeBlock >
-						<TouchableOpacity onPress={this._handlePressButtonAsync}>
-							<QRCode
-								logo={require("../assets/profile.png")}
-								codeStyle='square'
-								content={`http://bizcards.tools/profile/${userUid}`}
-							/>
-						</TouchableOpacity>
-					</QRCodeBlock>
-				</View>
-				<TouchableOpacity
-					onPress={() => this.props.navigation.navigate('Settings')}
-					style={{
-						alignItems: 'center',
-						justifyContent: 'center',
-						width: 70,
-						position: 'absolute',
-						top: 40,
-						right: 10,
-						height: 70,
-					}}
-				>
-					<AddIcon source={require("../assets/gear.png")} />
-				</TouchableOpacity>
-				<FloatingAction
-					style={{marginLeft: 30}}
-					actions={actions}
-					color="#032c8e"
-					overlayColor="rgba(244, 244, 255, 0.6)"
-					onPressItem={name => {
-						if (name === "card_Add")
-							this.props.navigation.navigate('CreateCard')
-						if (name === "card_Modify")
-							this.props.navigation.navigate({
-								routeName: 'EditProfile',
-							})
-					}}
-				/>
+						</Card>
+					</View>
+					<View style={styles.qrcodeContainer}>
+						<QRCodeBlock >
+							<TouchableOpacity onPress={this._handlePressButtonAsync}>
+								<QRCode
+									logo={require("../assets/profile.png")}
+									codeStyle='square'
+									content={`http://bizcards.tools/profile/${userUid}`}
+								/>
+							</TouchableOpacity>
+						</QRCodeBlock>
+					</View>
+					<FloatingAction
+						style={{ marginLeft: 30 }}
+						actions={actions}
+						color="#032c8e"
+						overlayColor="rgba(244, 244, 255, 0.6)"
+						onPressItem={name => {
+							if (name === "card_Add")
+								this.props.navigation.navigate('CreateCard')
+							if (name === "card_Modify")
+								this.props.navigation.navigate({
+									routeName: 'EditProfile',
+								})
+						}}
+					/>
 				</ScrollView>
 			</Container >
 		)
@@ -298,7 +301,7 @@ const styles = StyleSheet.create({
 		justifyContent: 'center',
 		marginLeft: 150,
 		marginTop: "35%",
-		height:"15%",
+		height: "15%",
 		width: "15%",
 	},
 	loading: {
@@ -313,7 +316,7 @@ const styles = StyleSheet.create({
 		borderRadius: 8,
 		padding: 10,
 		margin: 10,
-		
+
 	},
 	cardStyle: {
 		flex: 1,

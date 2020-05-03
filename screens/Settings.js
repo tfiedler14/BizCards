@@ -53,7 +53,7 @@ class Settings extends React.Component {
 					<TouchableOpacity onPress={() => this.props.navigation.navigate({
                         routeName: 'Profile',
                         params: {
-                            userUid: this.props.user.uid
+                            userUid: this.props.user.uid,
                         }
                     })}>
                         <Title>Cancel</Title>

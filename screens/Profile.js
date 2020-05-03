@@ -35,7 +35,7 @@ class Profile extends React.Component {
 
 		setTimeout(() => {
 			this.setState({
-				isLoading: false
+				isLoading: false,
 			})
 		},
 			10)
@@ -244,7 +244,7 @@ const Container = styled.View`
 `
 
 const QRCodeBlock = styled.View`
-	padding-top: 5%;
+	padding-top: 10%;
 `
 
 const Titlebar = styled.View`

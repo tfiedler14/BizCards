@@ -237,7 +237,7 @@ class CreateCardScreen extends React.Component {
                 this.props.navigation.navigate({
                     routeName: 'Profile',
                     params: {
-                        userUid: this.props.user.uid
+                        userUid: this.props.user.uid,
                     }
                 })
             })

@@ -126,25 +126,20 @@ class CreateCardScreen extends React.Component {
                         title='Primary Information'
                         titleStyle={{ color: '#137AC2' }}
                         containerStyle={styles.primaryCard} >
-                        <View style={{ flexDirection: 'row'}} >
-                            {/* <Image source={require("../assets/defaultProfPic.png")}
-                                style={{ top: 30, left: 0, width: 65, height: 65, resizeMode: 'contain', borderRadius: 15 }}>
-                            </Image> */}
-                            {/* <View style={{ flexDirection: 'column', alignItems:'stretch' }} > */}
-                                <View style={{width: '50%', flexDirection:'column', alignItems:'flex-start', padding: 5}}>
-                                    <Text style={{ backgroundColor:'#D0D0D0', padding: 5, fontWeight: "bold", textAlign: 'center' }} >Full Name:</Text>
-                                    <Text style={{ backgroundColor:'#D0D0D0', padding: 5, fontWeight: "bold", textAlign: 'center' }} >Email: </Text>
-                                    <Text style={{ backgroundColor:'#D0D0D0', padding: 5, fontWeight: "bold", textAlign: 'center' }}>Mobile: </Text>
-                                    <Text style={{ backgroundColor:'#D0D0D0', padding: 5, fontWeight: "bold", textAlign: 'center' }} >Bio: </Text>
+                        <View style={{ flexDirection: 'row', justifyContent: 'flex-start'}} >
+                                <View style={{width: '50%', flexDirection:'column', alignItems:'flex-start'}}>
+                                    <Text style={{ textAlignVertical:'center', width: '95%', backgroundColor:'#D0D0D0', textAlign:'left',  padding: 12, marginTop:7, marginBottom:7, fontWeight: "bold", textAlign: 'center' }} >Full Name:</Text>
+                                    <Text style={{ textAlignVertical:'center', width: '95%', backgroundColor:'#D0D0D0', textAlign:'left',  padding: 13, marginTop:7, marginBottom:9,fontWeight: "bold", textAlign: 'center', borderRadius:5 }}>Email: </Text>
+                                    <Text style={{ textAlignVertical:'center', width: '95%', backgroundColor:'#D0D0D0', textAlign:'left',  padding: 13, marginTop:5, marginBottom:9,fontWeight: "bold", textAlign: 'center', borderRadius:5 }}>Mobile: </Text>
+                                    <Text style={{ textAlignVertical:'center', width: '95%', backgroundColor:'#D0D0D0', textAlign:'left',  padding: 13, marginTop:5, marginBottom:10,fontWeight: "bold", textAlign: 'center', borderRadius:5 }} >Bio: </Text>
                                 </View>
-                                <View style={{width:'50%', flexDirection:'column'}}>
-                                    <CheckBox containerStyle={{ backgroundColor:'#D0D0D0', width: '100%', alignSelf: 'flex-end' }} right iconRight title={<Text style={{ padding: 5, fontWeight: "bold", textAlign: 'center' }}>{this.state.profile[0].FullName}</Text>} checked={true} />
-                                    <CheckBox containerStyle={{ backgroundColor:'#D0D0D0', width: '100%', alignSelf: 'flex-end' }} right iconRight title={<Text style={{ padding: 5, fontWeight: "bold", }}>{this.state.profile[1].Email}</Text>} onPress={() => this.handleProfileClick(this.state.profile[1])} checked={this.state.profile[1].checked} />
-                                    <CheckBox containerStyle={{ backgroundColor:'#D0D0D0', width: '100%', alignSelf: 'flex-end' }} right iconRight title={<Text style={{ padding: 5, fontWeight: "bold", }}>{this.state.profile[2].Mobile}</Text>} onPress={() => this.handleProfileClick(this.state.profile[2])} checked={this.state.profile[2].checked} />
-                                    <CheckBox containerStyle={{ backgroundColor:'#D0D0D0', width: '100%', alignSelf: 'flex-end' }} right iconRight title={<Text style={{ padding: 5, fontWeight: "bold", }}>{this.state.profile[3].Bio}</Text>} onPress={() => this.handleProfileClick(this.state.profile[3])} checked={this.state.profile[3].checked} />
+                                <View style={{width:'50%', flexDirection:'column', alignItems:'flex-start'}}>
+                                    <CheckBox containerStyle={{ backgroundColor:'#D0D0D0', width: '95%', alignSelf: 'flex-end' }} right iconRight title={<Text style={{ padding: 3, marginTop:0, fontWeight: "bold", textAlign: 'center' }}>{this.state.profile[0].FullName}</Text>} checked={true} />
+                                    <CheckBox containerStyle={{ backgroundColor:'#D0D0D0', width: '95%', alignSelf: 'flex-end' }} right iconRight title={<Text style={{ padding: 3, marginTop:0, fontWeight: "bold", }}>{this.state.profile[1].Email}</Text>} onPress={() => this.handleProfileClick(this.state.profile[1])} checked={this.state.profile[1].checked} />
+                                    <CheckBox containerStyle={{ backgroundColor:'#D0D0D0', width: '95%', alignSelf: 'flex-end' }} right iconRight title={<Text style={{ padding: 3, marginTop:0, fontWeight: "bold", }}>{this.state.profile[2].Mobile}</Text>} onPress={() => this.handleProfileClick(this.state.profile[2])} checked={this.state.profile[2].checked} />
+                                    <CheckBox containerStyle={{ backgroundColor:'#D0D0D0', width: '95%', alignSelf: 'flex-end' }} right iconRight title={<Text style={{ padding: 3, marginTop:0, fontWeight: "bold", }}>{this.state.profile[3].Bio}</Text>} onPress={() => this.handleProfileClick(this.state.profile[3])} checked={this.state.profile[3].checked} />
                                 </View>
 
-                            {/* </View> */}
                         </View>
 
                     </Card>

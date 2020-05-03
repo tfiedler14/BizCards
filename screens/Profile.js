@@ -9,13 +9,15 @@ import firebase from 'firebase'
 import * as firebaseApp from "firebase"
 
 import * as WebBrowser from 'expo-web-browser';
+import { isMoment } from 'moment';
 require('firebase/auth')
 
 class Profile extends React.Component {
+	_isMounted = false;
 	constructor(props) {
 		super(props);
-		const userID = this.props.navigation.getParam('userUid')
-		this.userInfo = firebaseApp.database().ref("/users/" + userID)
+		const userID = this.props.navigation.getParam('userUid');
+		this.userInfo = firebaseApp.database().ref("/users/" + userID);
 		this.state = {
 			isLoading: true,
 			profile: [
@@ -28,6 +30,7 @@ class Profile extends React.Component {
 			timeStamp: ""
 		}
 	}
+
 	componentWillMount() {
 		
 		setTimeout(() => {
@@ -38,10 +41,23 @@ class Profile extends React.Component {
 			10)
 	}
 
+
 	componentDidMount() {
+		this._isMounted = true;
+		setTimeout(() => {
+			if (this._isMounted) {
+				this.setState({
+					isLoading: false
+				});
+			}
+		}, 10)
 		this.listenForUser(this.userInfo)
 	}
 	
+
+	componentWillUnmount() {
+		this._isMounted = false;
+	}
 
 	async listenForUser(userInfo) {
 		userInfoCheck = this.userInfo.toString()
@@ -55,8 +71,7 @@ class Profile extends React.Component {
 		var loadprofile = []
 		var loadsocialMedias = []
 		var time = ""
-		console.log("USRINFO", userInfo)
-		console.log("PROPS", this.props)
+
 		await userInfo.on("value", dataSnapshot => {
 			dataSnapshot.forEach(child => {
 				if (child.key == 'profile') {
@@ -74,15 +89,22 @@ class Profile extends React.Component {
 					time = child.val()
 				}
 			})
-			console.log("nestedPro", loadprofile)
 			this.setState({
 				profile: loadprofile,
 				socialMedias: loadsocialMedias,
 				timeStamp: time
 			})
-
-
 		})
+
+			if (this._isMounted) {
+				this.setState({
+					profile: loadprofile,
+					socialMedias: loadsocialMedias,
+					timeStamp: time
+				})
+			}
+
+
 	}
 
 	handleSignout = () => {
@@ -136,17 +158,27 @@ class Profile extends React.Component {
 						titleStyle={{ color: '#137AC2' }}
 						containerStyle={styles.primaryCard} >
 						<View style={{ flexDirection: 'row', justifyContent: 'space-between' }} >
-							<Image source={require("../assets/defaultProfPic.png")}
-								style={{ top: 30, left: 0, width: 65, height: 65, resizeMode: 'contain', borderRadius: 15 }}>
-							</Image>
-							<View style={{ flexDirection: 'column' }} >
-								<Text style={{ padding: 5, fontWeight: "bold", textAlign: 'center' }}>{this.state.profile[0].FullName}</Text>
-								<Text style={{ padding: 5, fontWeight: "bold", }}>{this.state.profile[1].Email}</Text>
-								<Text style={{ padding: 5, fontWeight: "bold", }}>{this.state.profile[2].Mobile}</Text>
-								<Text style={{ padding: 5, fontWeight: "bold", }}>{this.state.profile[3].Bio}</Text>
+							<View style={styles.imageContainer}>
+								<Image
+									source={require("../assets/defaultProfPic.png")}
+									style={styles.imageView}>
+								</Image>
+							</View>
+							<View style={{ flexDirection: 'column', alignItems: 'flex-start' }} >
+								<View style={styles.cardStyle}>
+									<Text style={styles.text}>Email: </Text>
+									<Text style={{ fontWeight: "bold", }}>{this.state.profile[1].Email}</Text>
+								</View>
+								<View style={styles.cardStyle}>
+									<Text style={styles.text} >Mobile: </Text>
+									<Text style={{ fontWeight: "bold", }}>{this.state.profile[2].Mobile}</Text>
+								</View>
+								<View style={styles.cardStyle}>
+									<Text style={styles.text}  >Bio: </Text>
+									<Text style={{ fontWeight: "bold", }}>{this.state.profile[3].Bio}</Text>
+								</View>
 							</View>
 						</View>
-
 					</Card>
 				</View>
 				<View >
@@ -182,7 +214,9 @@ class Profile extends React.Component {
 						if (name === "card_Add")
 							this.props.navigation.navigate('CreateCard')
 						if (name === "card_Modify")
-							this.props.navigation.navigate('EditProfile')
+							this.props.navigation.navigate({
+								routeName: 'EditProfile',
+							})
 					}}
 				/>
 			</Container>
@@ -203,7 +237,7 @@ const Container = styled.View`
 `
 
 const QRCodeBlock = styled.View`
-	padding-top: 50%;
+	padding-top: 5%;
 `
 
 const Titlebar = styled.View`
@@ -257,14 +291,47 @@ const styles = StyleSheet.create({
 		right: 0
 	},
 	qrcodeContainer: {
-		justifyContent: 'center',
 		alignItems: 'center',
-		marginBottom: 150,
 	},
 	loading: {
 		flex: 1,
 		justifyContent: 'center',
 		alignItems: 'center',
+	},
+	primaryCard: {
+		borderColor: "#137AC2",
+		borderWidth: 5,
+		backgroundColor: "#FFF",
+		borderRadius: 8,
+		padding: 10,
+		margin: 10,
+	},
+	cardStyle: {
+		flex: 1,
+		flexDirection: 'row',
+		alignItems: 'flex-start',
+		justifyContent: 'flex-start'
+	},
+	imageView: {
+		alignItems: 'flex-end',
+		justifyContent: 'flex-end',
+		left: 0,
+		width: 90,
+		height: 90,
+		resizeMode: 'contain',
+		borderRadius: 15,
+	},
+	imageContainer: {
+		alignItems: 'center',
+		justifyContent: 'center',
+	},
+	text: {
+		fontSize: 15,
+		fontWeight: 'bold',
+		color: '#1A1E9C'
+	},
+	socialMedia: {
+		flexDirection: 'column',
 	}
 })
 

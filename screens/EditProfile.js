@@ -92,7 +92,7 @@ class CreateCardScreen extends React.Component {
         })
     }
     handleAddLink() {
-        console.log(this.presetMedias)
+        // console.log(this.presetMedias)
         this.setState({
             addMediaDialog: true
         })
@@ -100,9 +100,9 @@ class CreateCardScreen extends React.Component {
     handleAddDomain(domainKey, domainLink, edit) {
 
         temp = this.state.socialMedias
-        console.log("made it to domain", temp)
+        // console.log("made it to domain", temp)
         insert = { key: domainKey, link: domainLink }
-        
+
         userLink = ""
         this.setState({
             addMediaInput: true,
@@ -111,14 +111,14 @@ class CreateCardScreen extends React.Component {
             editActive: edit
         })
 
-        console.log("curr", insert)
+        // console.log("curr", insert)
 
     }
 
     handleProfileEdit(field, index) {
         // currState = this.state
         temp = this.state.profile
-        console.log(temp)
+        // console.log(temp)
 
         if (index == 0) {
             //fullname
@@ -141,7 +141,7 @@ class CreateCardScreen extends React.Component {
             profile: temp,
         })
 
-        console.log("new State", this.state.profile)
+        // console.log("new State", this.state.profile)
 
     }
     handleURLEdit(url) {
@@ -154,11 +154,11 @@ class CreateCardScreen extends React.Component {
     handleSaveLink() {
         input = { site: this.state.mediaInput["key"], link: this.state.mediaInput["link"], checked: false }
 
-        console.log("input", input)
+        // console.log("input", input)
         medias = this.state.socialMedias
         sites = medias.map(function (item) { return item.site; })
-        console.log("site", input["site"])
-        console.log(sites.indexOf(input["site"]))
+        // console.log("site", input["site"])
+        // console.log(sites.indexOf(input["site"]))
         if (sites.indexOf(input["site"]) >= 0) {
             var removeIndex = medias.map(function (item) { return item.site; }).indexOf(input["site"]);
             medias.splice(removeIndex, 1)
@@ -182,7 +182,7 @@ class CreateCardScreen extends React.Component {
         var removeIndex = medias.map(function (item) { return item.site; }).indexOf(input["key"]);
         // remove object
         medias.splice(removeIndex, 1)
-        console.log(medias)
+        // console.log(medias)
 
         this.setState({
             socialMedias: medias,
@@ -196,12 +196,12 @@ class CreateCardScreen extends React.Component {
         alert("Your link has been successfully deleted")
     }
     handleExistingInteraction(existingLink) {
-        console.log(existingLink)
+        // console.log(existingLink)
         this.handleAddDomain(existingLink.site, existingLink.link, true)
     }
 
     handleCancel = () => {
-        console.log("Hit")
+        // console.log("Hit")
         if (this.state.pendingAdd == true) {
             alert("you're not saving the new link")
         }
@@ -216,35 +216,40 @@ class CreateCardScreen extends React.Component {
         if (temp[0].FullName.trim() == "") {
             validSave = false
             profileError = true
-            console.log("FullName")
+            // console.log("FullName")
         }
         if (temp[1].Email.trim() == "") {
             validSave = false
             profileError = true
-            console.log("Email")
+            // console.log("Email")
 
         }
         if (temp[2].Mobile.trim() == "") {
             validSave = false
             profileError = true
-            console.log("Mobile")
+            // console.log("Mobile")
 
         }
         if (temp[3].Bio.trim() == "") {
             validSave = false
             profileError = true
-            console.log("Bio")
+            // console.log("Bio")
 
         }
         if (currState.editActive == true || currState.pendingAdd == true) {
             validSave = false
         }
-        console.log("CurrentState", this.state.profile, this.state.socialMedias)
+        // console.log("CurrentState", this.state.profile, this.state.socialMedias)
         if (validSave) {
             firebaseApp.database().ref("/users/" + this.props.user.uid + "/profile/").set(this.state.profile);
             return firebaseApp.database().ref("/users/" + this.props.user.uid + "/medias/").set(this.state.socialMedias).then(() => {
                 Alert.alert("Save Successful", "The adjusts you've made on your profile have been saved!");
-                this.props.navigation.navigate('Profile')
+                this.props.navigation.navigate({
+                    routeName: 'Profile',
+                    params: {
+                        userUid: this.props.user.uid
+                    }
+                })
             })
         } else {
             if (currState.editActive == true && profileError == false) {
@@ -290,7 +295,7 @@ class CreateCardScreen extends React.Component {
                                 <View style={{ flexDirection: 'row' }} >
                                     <Text style={{ color: '#137AC2', textAlignVertical: 'center' }}>Mobile: </Text>
                                     <TouchableOpacity >
-                                        <TextInput containerStyle={{ padding: 2, margin: 2, width: '100%', alignSelf: 'flex-end' }} keyboardType={'name-phone-pad'} value={this.state.profile[2].Mobile} onChangeText={Mobile => this.handleProfileEdit(Mobile, 2)} />
+                                        <TextInput containerStyle={{ padding: 2, margin: 2, width: '100%', alignSelf: 'flex-end' }} keyboardType={'phone-pad'} value={this.state.profile[2].Mobile} onChangeText={Mobile => this.handleProfileEdit(Mobile, 2)} />
                                     </TouchableOpacity>
                                 </View>
                                 <View style={{ flexDirection: 'row' }} >
@@ -379,11 +384,9 @@ class CreateCardScreen extends React.Component {
                         }
                     </Card>
                 </View>
-                <KeyboardAvoidingView style={styles.avoidingContainer} >
-                    <TouchableOpacity style={styles.saveBtn} onPress={() => this.handleProfileSave()}>
-                        <Text style={styles.saveText}>Save Profile</Text>
-                    </TouchableOpacity>
-                </KeyboardAvoidingView>
+                <TouchableOpacity style={styles.saveBtn} onPress={() => this.handleProfileSave()}>
+                    <Text style={styles.saveText}>Save Profile</Text>
+                </TouchableOpacity>
             </View>
         );
     }

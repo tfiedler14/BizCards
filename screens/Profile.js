@@ -9,13 +9,15 @@ import firebase from 'firebase'
 import * as firebaseApp from "firebase"
 
 import * as WebBrowser from 'expo-web-browser';
+import { isMoment } from 'moment';
 require('firebase/auth')
 
 class Profile extends React.Component {
+	_isMounted = false;
 	constructor(props) {
 		super(props);
-		const userID = this.props.navigation.getParam('userUid')
-		this.userInfo = firebaseApp.database().ref("/users/" + userID)
+		const userID = this.props.navigation.getParam('userUid');
+		this.userInfo = firebaseApp.database().ref("/users/" + userID);
 		this.state = {
 			isLoading: true,
 			profile: [
@@ -28,16 +30,21 @@ class Profile extends React.Component {
 			timeStamp: ""
 		}
 	}
-	componentWillMount() {
-		setTimeout(() => {
-			this.setState({
-				isLoading: false
-			})
-		},
-			10)
-	}
+
 	componentDidMount() {
+		this._isMounted = true;
+		setTimeout(() => {
+			if (this._isMounted) {
+				this.setState({
+					isLoading: false
+				});
+			}
+		}, 10)
 		this.listenForUser(this.userInfo)
+	}
+
+	componentWillUnmount() {
+		this._isMounted = false;
 	}
 
 	async listenForUser(userInfo) {
@@ -47,6 +54,7 @@ class Profile extends React.Component {
 		var time = ""
 		// console.log("USRINFO", userInfo)
 		// console.log("PROPS", this.props)
+
 		await userInfo.on("value", dataSnapshot => {
 			dataSnapshot.forEach(child => {
 				if (child.key == 'profile') {
@@ -65,17 +73,20 @@ class Profile extends React.Component {
 				}
 			})
 			// console.log("nestedPro", loadprofile)
-			this.setState({
-				profile: loadprofile,
-				socialMedias: loadsocialMedias,
-				timeStamp: time
-			})
+			if (this._isMounted) {
+				this.setState({
+					profile: loadprofile,
+					socialMedias: loadsocialMedias,
+					timeStamp: time
+				})
+			}
 			// console.log(this.state)
 
 			// console.log("IP", this.state.profile[0].FullName)
 			// console.log("nestedMed", loadsocialMedias)
 
 		})
+
 
 		// console.log("profile", loadprofile)
 		// console.log("medias", loadsocialMedias)
@@ -144,31 +155,15 @@ class Profile extends React.Component {
 							<View style={{ flexDirection: 'column', alignItems: 'flex-start' }} >
 								<View style={styles.cardStyle}>
 									<Text style={styles.text}>Email: </Text>
-									{console.log(this.state.profile[1].Email)}
-									{this.state.profile[1].Email ? (
-										<Text style={{ fontWeight: "bold", }}>{this.state.profile[1].Email}</Text> )
-										: (
-											<Text> </Text>
-										)
-									}
+									<Text style={{ fontWeight: "bold", }}>{this.state.profile[1].Email}</Text>
 								</View>
 								<View style={styles.cardStyle}>
 									<Text style={styles.text} >Mobile: </Text>
-									{this.state.profile[2].Mobile ? (
-										<Text style={{ fontWeight: "bold", }}>{this.state.profile[2].Mobile}</Text> )
-									: (
-											<Text> </Text>
-										)
-									}
+									<Text style={{ fontWeight: "bold", }}>{this.state.profile[2].Mobile}</Text>
 								</View>
 								<View style={styles.cardStyle}>
 									<Text style={styles.text}  >Bio: </Text>
-									{this.state.profile[3].Bio ? (
-									<Text style={{ fontWeight: "bold", }}>{this.state.profile[3].Bio}</Text> )
-									: (
-											<Text> </Text>
-										)
-									}
+									<Text style={{ fontWeight: "bold", }}>{this.state.profile[3].Bio}</Text>
 								</View>
 							</View>
 						</View>

@@ -165,15 +165,6 @@ class Profile extends React.Component {
 									<Text style={styles.text}  >Bio: </Text>
 									<Text style={{ fontWeight: "bold", }}>{this.state.profile[3].Bio}</Text>
 								</View>
-								{this.state.socialMedias.length == 0 ?
-									<Text></Text>
-									: <FlatList data={this.state.socialMedias} extraData={this.state} keyExtractor={item => item.site} key={item => item.site} renderItem={({ item }) =>
-										<View style={styles.socialMedia}>
-											<Text style={styles.text}  >Social Media: </Text>
-											<Text style={{ fontWeight: "bold" }}>{item.site}</Text>
-										</View>
-									} />
-								}
 							</View>
 						</View>
 					</Card>

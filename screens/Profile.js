@@ -32,7 +32,7 @@ class Profile extends React.Component {
 	}
 
 	componentWillMount() {
-		
+
 		setTimeout(() => {
 			this.setState({
 				isLoading: false
@@ -53,7 +53,7 @@ class Profile extends React.Component {
 		}, 10)
 		this.listenForUser(this.userInfo)
 	}
-	
+
 
 	componentWillUnmount() {
 		this._isMounted = false;
@@ -62,7 +62,7 @@ class Profile extends React.Component {
 	async listenForUser(userInfo) {
 		userInfoCheck = this.userInfo.toString()
 		console.log("listenForuser", userInfoCheck)
-		if(userInfoCheck.includes("undefined")){
+		if (userInfoCheck.includes("undefined")) {
 			this.userInfo = firebaseApp.database().ref("/users/" + this.props.user.uid)
 			userInfo = this.userInfo
 		}
@@ -139,7 +139,7 @@ class Profile extends React.Component {
 
 		return (
 			<Container>
-				<View style={{flexDirection: 'row'}}>
+				<View style={{ flexDirection: 'row' }}>
 					<Titlebar>
 						<Avatar source={require("../assets/profile.png")} />
 						<Title>Welcome back,</Title>
@@ -187,11 +187,13 @@ class Profile extends React.Component {
 										{(this.state.socialMedias.length === 0) ?
 											(<Text></Text>)
 											:
-											(<FlatList data={this.state.socialMedias} extraData={this.state} keyExtractor={item => item.site} key={item => item.site} renderItem={({ item }) =>
-												<TouchableOpacity onPress={() => { WebBrowser.openBrowserAsync(item.link) }} style={{ margin: 5, padding: 8, alignItems: 'center', backgroundColor: "#47ceff", borderColor: '#D0D0D0', borderRadius: 10, borderWidth: 1 }}>
-													<Text style={{ color: '#FFF', fontWeight: "bold", fontSize: 12 }}>{item.site}</Text>
-												</TouchableOpacity>
-											} />)
+											(
+												<FlatList numColumns={3} data={this.state.socialMedias} extraData={this.state} keyExtractor={item => item.site} key={item => item.site} renderItem={({ item }) =>
+													<TouchableOpacity onPress={() => { WebBrowser.openBrowserAsync(item.link) }} style={{ margin: 5, padding: 8, alignItems: 'center', backgroundColor: "#47ceff", borderColor: '#D0D0D0', borderRadius: 10, borderWidth: 1 }}>
+														<Text style={{ color: '#FFF', fontWeight: "bold", fontSize: 12 }}>{item.site}</Text>
+													</TouchableOpacity>
+												} />
+											)
 										}
 									</View>
 								</View>
@@ -346,7 +348,6 @@ const styles = StyleSheet.create({
 		flexDirection: 'column',
 	},
 	socialCardStyle: {
-		flex: 1,
 		flexDirection: 'column',
 		alignItems: 'flex-start',
 		justifyContent: 'flex-start',

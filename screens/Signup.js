@@ -35,6 +35,8 @@ class Signup extends React.Component {
 		}catch(e){
 			alert(e);
 		}
+
+		this.props.navigation.navigate('EditProfile')
 	}
 
 	render() {

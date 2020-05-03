@@ -2,7 +2,7 @@ import React from "react";
 import styled, { css } from "@emotion/native";
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
-import { StyleSheet, Text, Image, TextInput, TouchableOpacity, View, FlatList, Alert} from "react-native";
+import { StyleSheet, Text, Image, TextInput, TouchableOpacity, View, FlatList, Alert } from "react-native";
 import { Card, CheckBox } from 'react-native-elements';
 import * as firebaseApp from "firebase"
 import Profile from "./Profile";
@@ -52,23 +52,16 @@ class CreateCardScreen extends React.Component {
                     time = child.val()
                 }
             })
-            console.log("nestedPro", loadprofile)
+
             this.setState({
                 profile: loadprofile,
                 socialMedias: loadsocialMedias,
                 timeStamp: time
             })
-            console.log(this.state)
-
-            console.log("IP", this.state.profile[0].FullName)
-            console.log("nestedMed", loadsocialMedias)
 
         })
 
-        console.log("profile", loadprofile)
-        console.log("medias", loadsocialMedias)
 
-        console.log("state", this.state)
 
     }
 
@@ -78,9 +71,8 @@ class CreateCardScreen extends React.Component {
     handleProfileSave = this.handleProfileSave.bind(this);
 
     handleClick(name) {
-        console.log(name)
+
         const data = this.state.socialMedias;
-        console.log("data", data)
         const index = data.findIndex(x => x.site === name);
         data[index].checked = !data[index].checked;
         this.setState({
@@ -100,8 +92,6 @@ class CreateCardScreen extends React.Component {
             profile: temp
         })
 
-        console.log(this.state)
-
     }
     handleCancel = () => {
         console.log("Hit")
@@ -113,8 +103,6 @@ class CreateCardScreen extends React.Component {
         currState = this.state;
         profileError = false;
         validSave = true
-        console.log("Landed", this.state.profile, this.state.socialMedias)
-
         firebaseApp.database().ref("/users/" + this.props.user.uid + "/profile/").set(this.state.profile);
         return firebaseApp.database().ref("/users/" + this.props.user.uid + "/medias/").set(this.state.socialMedias).then(() => {
             Alert.alert("Save Successful", "The adjusts you've made on your profile have been saved!");
@@ -138,16 +126,25 @@ class CreateCardScreen extends React.Component {
                         title='Primary Information'
                         titleStyle={{ color: '#137AC2' }}
                         containerStyle={styles.primaryCard} >
-                        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }} >
-                            <Image source={require("../assets/defaultProfPic.png")}
+                        <View style={{ flexDirection: 'row'}} >
+                            {/* <Image source={require("../assets/defaultProfPic.png")}
                                 style={{ top: 30, left: 0, width: 65, height: 65, resizeMode: 'contain', borderRadius: 15 }}>
-                            </Image>
-                            <View style={{ flexDirection: 'column' }} >
-                                <CheckBox containerStyle={{ width: '100%', alignSelf: 'flex-end' }} right iconRight title={<Text style={{ padding: 5, fontWeight: "bold", textAlign: 'center' }}>{this.state.profile[0].FullName}</Text>} checked={true} />
-                                <CheckBox containerStyle={{ width: '100%', alignSelf: 'flex-end' }} right iconRight title={<Text style={{ padding: 5, fontWeight: "bold", }}>{this.state.profile[1].Email}</Text>} onPress={() => this.handleProfileClick(this.state.profile[1])} checked={this.state.profile[1].checked} />
-                                <CheckBox containerStyle={{ width: '100%', alignSelf: 'flex-end' }} right iconRight title={<Text style={{ padding: 5, fontWeight: "bold", }}>{this.state.profile[2].Mobile}</Text>} onPress={() => this.handleProfileClick(this.state.profile[2])} checked={this.state.profile[2].checked} />
-                                <CheckBox containerStyle={{ width: '100%', alignSelf: 'flex-end' }} right iconRight title={<Text style={{ padding: 5, fontWeight: "bold", }}>{this.state.profile[3].Bio}</Text>} onPress={() => this.handleProfileClick(this.state.profile[3])} checked={this.state.profile[3].checked} />
-                            </View>
+                            </Image> */}
+                            {/* <View style={{ flexDirection: 'column', alignItems:'stretch' }} > */}
+                                <View style={{width: '50%', flexDirection:'column', alignItems:'flex-start', padding: 5}}>
+                                    <Text style={{ backgroundColor:'#D0D0D0', padding: 5, fontWeight: "bold", textAlign: 'center' }} >Full Name:</Text>
+                                    <Text style={{ backgroundColor:'#D0D0D0', padding: 5, fontWeight: "bold", textAlign: 'center' }} >Email: </Text>
+                                    <Text style={{ backgroundColor:'#D0D0D0', padding: 5, fontWeight: "bold", textAlign: 'center' }}>Mobile: </Text>
+                                    <Text style={{ backgroundColor:'#D0D0D0', padding: 5, fontWeight: "bold", textAlign: 'center' }} >Bio: </Text>
+                                </View>
+                                <View style={{width:'50%', flexDirection:'column'}}>
+                                    <CheckBox containerStyle={{ backgroundColor:'#D0D0D0', width: '100%', alignSelf: 'flex-end' }} right iconRight title={<Text style={{ padding: 5, fontWeight: "bold", textAlign: 'center' }}>{this.state.profile[0].FullName}</Text>} checked={true} />
+                                    <CheckBox containerStyle={{ backgroundColor:'#D0D0D0', width: '100%', alignSelf: 'flex-end' }} right iconRight title={<Text style={{ padding: 5, fontWeight: "bold", }}>{this.state.profile[1].Email}</Text>} onPress={() => this.handleProfileClick(this.state.profile[1])} checked={this.state.profile[1].checked} />
+                                    <CheckBox containerStyle={{ backgroundColor:'#D0D0D0', width: '100%', alignSelf: 'flex-end' }} right iconRight title={<Text style={{ padding: 5, fontWeight: "bold", }}>{this.state.profile[2].Mobile}</Text>} onPress={() => this.handleProfileClick(this.state.profile[2])} checked={this.state.profile[2].checked} />
+                                    <CheckBox containerStyle={{ backgroundColor:'#D0D0D0', width: '100%', alignSelf: 'flex-end' }} right iconRight title={<Text style={{ padding: 5, fontWeight: "bold", }}>{this.state.profile[3].Bio}</Text>} onPress={() => this.handleProfileClick(this.state.profile[3])} checked={this.state.profile[3].checked} />
+                                </View>
+
+                            {/* </View> */}
                         </View>
 
                     </Card>
@@ -160,7 +157,7 @@ class CreateCardScreen extends React.Component {
                 <View style={styles.mediaContainer} >
                     <Card
                         containerStyle={styles.primaryCard} >
-                        {this.state.socialMedias.length != 0 ? <FlatList data={this.state.socialMedias} extraData={this.state} keyExtractor={item => item.site} renderItem={({ item }) => <CheckBox right iconRight title={item.site} key={item.site} onPress={() => this.handleClick(item.site)} checked={item.checked} />} /> :
+                        {this.state.socialMedias.length != 0 ? <FlatList data={this.state.socialMedias} extraData={this.state} keyExtractor={item => item.site} renderItem={({ item }) => <CheckBox containerStyle={{backgroundColor:'#D0D0D0'}} right iconRight title={item.site} key={item.site} onPress={() => this.handleClick(item.site)} checked={item.checked} />} /> :
                             <Text style={{ color: "#137AC2", padding: 5, fontWeight: "bold", textAlign: 'center' }}>Please add socialMedia links to enable bizCard customization</Text>
                         }
 

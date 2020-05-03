@@ -29,6 +29,7 @@ class Profile extends React.Component {
 		}
 	}
 	componentWillMount() {
+		
 		setTimeout(() => {
 			this.setState({
 				isLoading: false
@@ -36,11 +37,20 @@ class Profile extends React.Component {
 		},
 			10)
 	}
+
 	componentDidMount() {
 		this.listenForUser(this.userInfo)
 	}
+	
 
 	async listenForUser(userInfo) {
+		userInfoCheck = this.userInfo.toString()
+		console.log("listenForuser", userInfoCheck)
+		if(userInfoCheck.includes("undefined")){
+			this.userInfo = firebaseApp.database().ref("/users/" + this.props.user.uid)
+			userInfo = this.userInfo
+		}
+
 		tempState = []
 		var loadprofile = []
 		var loadsocialMedias = []
@@ -70,18 +80,9 @@ class Profile extends React.Component {
 				socialMedias: loadsocialMedias,
 				timeStamp: time
 			})
-			console.log(this.state)
 
-			console.log("IP", this.state.profile[0].FullName)
-			console.log("nestedMed", loadsocialMedias)
 
 		})
-
-		console.log("profile", loadprofile)
-		console.log("medias", loadsocialMedias)
-
-		console.log("state", this.state)
-
 	}
 
 	handleSignout = () => {

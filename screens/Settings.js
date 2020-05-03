@@ -50,7 +50,12 @@ class Settings extends React.Component {
 			<Container style={styles.container}>
 				<Titlebar>
 					<Avatar source={require("../assets/profile.png")} />
-					<TouchableOpacity onPress={() => this.props.navigation.navigate('Profile')}>
+					<TouchableOpacity onPress={() => this.props.navigation.navigate({
+                        routeName: 'Profile',
+                        params: {
+                            userUid: this.props.user.uid
+                        }
+                    })}>
                         <Title>Cancel</Title>
                     </TouchableOpacity>
 				</Titlebar>

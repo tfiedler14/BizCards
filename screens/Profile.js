@@ -146,7 +146,6 @@ class Profile extends React.Component {
 						titleStyle={{ color: '#137AC2' }}
 						containerStyle={styles.primaryCard}
 					>
-						<ScrollView style={styles.scrollContainer}>
 							<View style={{ flexDirection: 'row', justifyContent: 'space-between' }} >
 								<View style={styles.imageContainer}>
 									<Image
@@ -167,24 +166,20 @@ class Profile extends React.Component {
 										<Text style={styles.text}  >Bio: </Text>
 										<Text style={{ fontWeight: "bold", }}>{this.state.profile[3].Bio}</Text>
 									</View>
-
 									<View style={styles.cardStyle}>
 										<Text style={styles.text} >Social Media: </Text>
 										{(this.state.socialMedias.length === 0) ?
-											(<Text>Nothing to display</Text>)
+											(<Text></Text>)
 											:
 											(<FlatList data={this.state.socialMedias} extraData={this.state} keyExtractor={item => item.site} key={item => item.site} renderItem={({ item }) =>
 												<TouchableOpacity onPress={() => { WebBrowser.openBrowserAsync(item.link) }} style={{ margin: 5, padding: 8, alignItems: 'center', backgroundColor: "#47ceff", borderColor: '#D0D0D0', borderRadius: 10, borderWidth: 1 }}>
 														<Text style={{ color: '#FFF', fontWeight: "bold", fontSize: 12 }}>{item.site}</Text>
 												</TouchableOpacity>
-
 											} />)
 										}
 									</View>
-
 								</View>
 							</View>
-						</ScrollView>
 					</Card>
 				</View>
 				<View style={styles.qrcodeContainer}>
@@ -302,6 +297,7 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 		justifyContent: 'center',
 		marginLeft: 150,
+		marginTop: "35%",
 		height:"15%",
 		width: "15%",
 	},
@@ -317,7 +313,7 @@ const styles = StyleSheet.create({
 		borderRadius: 8,
 		padding: 10,
 		margin: 10,
-		height: "65%"
+		
 	},
 	cardStyle: {
 		flex: 1,

@@ -77,6 +77,7 @@ class Settings extends React.Component {
                 </TouchableOpacity>
                 <View style={styles.primaryContainer}>
                     <Text style={styles.txtSecondary}>Change Your Password</Text>
+                    <Text style={styles.divider} >Please enter your current password before making an edit your email or password</Text>
                     <TextInput style={styles.textInput} value={this.state.currentPassword}
                         placeholder="Current Password" autoCapitalize="none" secureTextEntry={true}
                         onChangeText={(text) => { this.setState({ currentPassword: text }) }}
@@ -103,15 +104,13 @@ class Settings extends React.Component {
 
                 </View>
                 <TouchableOpacity style={styles.deleteBtn} onPress={() => {
-                        firebaseApp.database().ref("/users/" + this.props.user.uid).set(null)
-                        firebase
-                            .auth()
-                            .currentUser.delete()
-                            .then(this.props.navigation.navigate('Login'))
+                    console.log("Deleting")
+                    firebaseApp.database().ref("/users/" + this.props.user.uid).set(null)
+                    firebase.auth().currentUser.delete().then(this.handleSignout)
                             .catch(error => {
                                 console.log('User not deleted.');
                             });
-                            this.props.navigation.navigate('Login')
+                            // this.props.navigation.navigate('Login')
                     }}>
                         <Text style={styles.saveText}>Delete Account</Text>
                     </TouchableOpacity>
@@ -193,10 +192,14 @@ const styles = StyleSheet.create({
     divider: {
         position: 'relative',
         marginTop: 0,
-        marginBottom: 10,
+        marginBottom: 15,
         padding: 0,
-        width: '75%',
-        top: 0
+        width: '85%',
+        top: 0,
+        fontSize: 15,
+        alignSelf:'center', 
+        textAlign:'center',
+        color: '#137AC2', 
     },
     primaryCard: {
         borderColor: "#FFF",

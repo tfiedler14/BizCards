@@ -199,19 +199,17 @@ class Profile extends React.Component {
 								</View>
 							</View>
 						</Card>
-					</View>
-					<View style={styles.qrcodeContainer}>
-						<QRCodeBlock >
-							<TouchableOpacity onPress={this._handlePressButtonAsync}>
+							<TouchableOpacity onPress={this._handlePressButtonAsync}
+							style={styles.qrcodeContainer}>
 								<QRCode
 									logo={require("../assets/profile.png")}
 									codeStyle='square'
 									content={`http://bizcards.tools/profile/${userUid}`}
 								/>
 							</TouchableOpacity>
-						</QRCodeBlock>
 					</View>
-					<FloatingAction
+					</ScrollView>
+				<FloatingAction
 						style={{ marginLeft: 30 }}
 						actions={actions}
 						color="#032c8e"
@@ -225,7 +223,6 @@ class Profile extends React.Component {
 								})
 						}}
 					/>
-				</ScrollView>
 			</Container >
 		)
 
@@ -300,10 +297,7 @@ const styles = StyleSheet.create({
 	qrcodeContainer: {
 		alignItems: 'center',
 		justifyContent: 'center',
-		marginLeft: 150,
 		marginTop: "35%",
-		height: "15%",
-		width: "15%",
 	},
 	loading: {
 		flex: 1,

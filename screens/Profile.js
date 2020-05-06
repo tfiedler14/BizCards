@@ -120,18 +120,27 @@ class Profile extends React.Component {
 		
 		const actions = [
 			{
-				text: "Set Card",
+				text: "Set Profile Visibility",
 				icon: require("../assets/addCardIcon.png"),
 				name: "card_Add",
+				color: '#032c8e',
+				buttonSize: 50,
+				size: 45,
+				position: 3
+			},
+			{
+				text: "Modify Profile",
+				icon: require("../assets/editCardIcon.png"),
+				name: "card_Modify",
 				color: '#032c8e',
 				buttonSize: 50,
 				size: 45,
 				position: 2
 			},
 			{
-				text: "Modify Profile",
-				icon: require("../assets/editCardIcon.png"),
-				name: "card_Modify",
+				text: "Settings",
+				icon: require("../assets/gear.png"),
+				name: "settings",
 				color: '#032c8e',
 				buttonSize: 50,
 				size: 45,
@@ -154,11 +163,10 @@ class Profile extends React.Component {
 					<Title>Welcome back,</Title>
 					<Name>{this.props.user.name}</Name>
 				</Titlebar>
-
 				<ScrollView style={styles.scrollContainer}>
 					<View >
 						<Card
-							title='Current Card'
+							title='Current Profile'
 							titleStyle={{ color: '#137AC2' }}
 							containerStyle={styles.primaryCard}
 						>
@@ -166,22 +174,22 @@ class Profile extends React.Component {
 								<View style={{ width: '50%', left: 0 }}>
 									<View style={styles.cardStyle}>
 										<Text style={styles.text}>Name: </Text>
-										<Text style={{ fontWeight: "bold", }}>{this.state.profile[0].FullName}</Text>
+										<Text style={styles.cardText}>{this.state.profile[0].FullName}</Text>
 									</View>
 									{this.state.profile[1].checked ? (<View style={styles.cardStyle}>
 										<Text style={styles.text}>Email: </Text>
-										<Text style={{ fontWeight: "bold", }}>{this.state.profile[1].Email}</Text>
+										<Text style={styles.cardText}>{this.state.profile[1].Email}</Text>
 									</View> ): <></> }
 									
 									{this.state.profile[2].checked ? 
 									(<View style={styles.cardStyle}>
 										<Text style={styles.text} >Mobile: </Text>
-										<Text style={{ fontWeight: "bold", }}>{this.state.profile[2].Mobile}</Text>
+										<Text style={styles.cardText}>{this.state.profile[2].Mobile}</Text>
 									</View>) : <></>}
 
 									{this.state.profile[3].checked ? (<View style={styles.cardStyle}>
 										<Text style={styles.text}  >Bio: </Text>
-										<Text style={{ fontWeight: "bold", }}>{this.state.profile[3].Bio}</Text>
+										<Text style={styles.cardText}>{this.state.profile[3].Bio}</Text>
 									</View>) : <></>}
 								</View>
 
@@ -205,14 +213,13 @@ class Profile extends React.Component {
 						<View style={styles.divider}>
 							<Text style={{ color: '#137AC2', textAlign: 'center' }}>Want the ability to save multiple custom cards? Start your premium subscription now!</Text>
 						</View>
-						<View style={{ alignItems: 'center' }}>
+						<View style={{ alignItems: 'center', marginBottom: 40 }}>
 							<Card
 								title='Scan barcode for access to profile hub'
 								titleStyle={{ color: '#137AC2' }}
 								containerStyle={styles.primaryCard}
 							>
 								<View style={{ alignItems: 'center'}}>
-									<QRCodeBlock>
 										<TouchableOpacity onPress={this._handlePressButtonAsync}>
 											{console.log("HELLO", this.userID)}
 											{this.userID != undefined ? <QRCode
@@ -225,30 +232,12 @@ class Profile extends React.Component {
 											content={`http://bizcards.tools/profile/` + this.props.user.id}
 										/> }
 										</TouchableOpacity>
-									</QRCodeBlock>
 								</View>
 
 							</Card>
 
 						</View>
 					</View>
-
-
-					<TouchableOpacity
-						onPress={() => this.props.navigation.navigate('Settings')}
-						style={{
-							alignItems: 'center',
-							justifyContent: 'center',
-							width: 70,
-							position: 'absolute',
-							top: 5,
-							right: 10,
-							height: 70,
-						}}
-					>
-						<AddIcon source={require("../assets/gear.png")} />
-					</TouchableOpacity>
-
 				</ScrollView>
 				<FloatingAction
 					style={{ marginLeft: 30, }}
@@ -259,9 +248,9 @@ class Profile extends React.Component {
 						if (name === "card_Add")
 							this.props.navigation.navigate('CreateCard')
 						if (name === "card_Modify")
-							this.props.navigation.navigate({
-								routeName: 'EditProfile',
-							})
+							this.props.navigation.navigate('EditProfile')
+						if (name === "settings")
+							this.props.navigation.navigate('Settings')
 					}}
 				/>
 			</Container >
@@ -282,10 +271,6 @@ class Profile extends React.Component {
 const Container = styled.View`
 	flex: 1;
 	background-color: white;
-`
-
-const QRCodeBlock = styled.View`
-	padding-top: 10%;
 `
 
 const Titlebar = styled.View`
@@ -360,10 +345,11 @@ const styles = StyleSheet.create({
 		borderRadius: 8,
 		padding: 10,
 		margin: 10,
+		marginTop: 20,
 	},
 	cardStyle: {
 		flex: 1,
-		flexDirection: 'row',
+		flexDirection: 'column',
 		alignItems: 'flex-start',
 		justifyContent: 'flex-start'
 	},
@@ -398,6 +384,11 @@ const styles = StyleSheet.create({
 		flexGrow: 1,
 		flexDirection: 'column'
 	},
+	cardText:{
+		fontWeight: "bold",
+		margin: 5,
+		marginLeft: 0,
+	}
 })
 
 const mapStateToProps = state => {

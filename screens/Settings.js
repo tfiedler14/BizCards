@@ -1,6 +1,6 @@
 import React from 'react'
 import styled, { css } from "@emotion/native"
-import { View, Text, StyleSheet, TouchableOpacity, Image, TextInput, Alert, Button } from 'react-native'
+import { View, Text, StyleSheet, TouchableOpacity, Image, TextInput, Alert} from 'react-native'
 import { Card } from 'react-native-elements';
 import { connect } from 'react-redux'
 import firebase from 'firebase'
@@ -66,17 +66,17 @@ class Settings extends React.Component {
                     style={{
                         alignItems: 'center',
                         justifyContent: 'center',
-                        width: 70,
+                        width: 80,
                         position: 'absolute',
-                        top: 40,
+                        top: 30,
                         right: 10,
-                        height: 70,
+                        height: 80,
                     }}
                 >
                     <AddIcon source={require("../assets/logOut.png")} />
                 </TouchableOpacity>
                 <View style={styles.primaryContainer}>
-                    <Text>Enter password to change password or email</Text>
+                    <Text style={styles.txtSecondary}>Change Your Password</Text>
                     <TextInput style={styles.textInput} value={this.state.currentPassword}
                         placeholder="Current Password" autoCapitalize="none" secureTextEntry={true}
                         onChangeText={(text) => { this.setState({ currentPassword: text }) }}
@@ -87,16 +87,22 @@ class Settings extends React.Component {
                         onChangeText={(text) => { this.setState({ newPassword: text }) }}
                     />
 
-                    <Button title="Change Password" onPress={this.onChangePassword} />
+                    <TouchableOpacity style={styles.Btn} onPress={this.onChangePassword}>
+                        <Text style={styles.saveText}>Change Password</Text>
+                    </TouchableOpacity>
 
+                    <Text style={styles.txtSecondaryExtra}>Change Your Email</Text>
                     <TextInput style={styles.textInput} value={this.state.newEmail}
                         placeholder="New Email" autoCapitalize="none" keyboardType="email-address"
                         onChangeText={(text) => { this.setState({ newEmail: text }) }}
                     />
 
-                    <Button title="Change Email" onPress={this.onChangeEmail} />
+                    <TouchableOpacity style={styles.Btn} onPress={this.onChangeEmail}>
+                        <Text style={styles.saveText}>Change Email</Text>
+                    </TouchableOpacity>
 
-                    <TouchableOpacity style={styles.saveBtn} onPress={() => {
+                </View>
+                <TouchableOpacity style={styles.deleteBtn} onPress={() => {
                         firebaseApp.database().ref("/users/" + this.props.user.uid).set(null)
                         firebase
                             .auth()
@@ -109,7 +115,6 @@ class Settings extends React.Component {
                     }}>
                         <Text style={styles.saveText}>Delete Account</Text>
                     </TouchableOpacity>
-                </View>
             </Container>
         )
     }
@@ -179,8 +184,7 @@ const styles = StyleSheet.create({
         borderBottomColor: "#FFF"
     },
     primaryContainer: {
-        position: 'relative',
-        top: 50,
+        top: 20,
         width: '90%',
         marginBottom: 10,
         padding: 0,
@@ -207,7 +211,7 @@ const styles = StyleSheet.create({
         height: '45%',
         marginBottom: 0,
     },
-    saveBtn: {
+    Btn: {
         width: "80%",
         backgroundColor: "#032c8e",
         borderRadius: 25,
@@ -215,11 +219,50 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
         alignItems: "center",
         justifyContent: "center",
-        marginTop: 40,
         marginBottom: 10
+    },
+    deleteBtn: {
+        position: 'absolute',
+        bottom: 25,
+        width: "80%",
+        backgroundColor: "#E22D2D",
+        borderRadius: 25,
+        height: 50,
+        alignSelf: 'center',
+        alignItems: "center",
+        justifyContent: "center",
+    },
+    textInput: {
+        width: "80%",
+        fontWeight: 'bold',
+        backgroundColor: "#EFEFEF",
+        color: "#032c8e",
+        borderRadius: 20,
+        height: 55,
+        marginBottom: 20,
+        alignSelf: 'center',
+        alignItems: "center",
+        justifyContent: "center",
+        padding: 20
     },
     saveText: {
         color: "white"
+    },
+    txtSecondary: {
+        fontSize: 19, 
+        fontWeight: 'bold', 
+        color: '#137AC2', 
+        alignSelf: 'center',
+        marginBottom: 20,
+        marginTop: 20,
+    },
+    txtSecondaryExtra: {
+        fontSize: 19, 
+        fontWeight: 'bold', 
+        color: '#137AC2', 
+        alignSelf: 'center',
+        marginBottom: 20,
+        marginTop: 40,
     }
 })
 

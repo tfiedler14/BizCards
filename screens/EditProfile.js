@@ -257,8 +257,7 @@ class CreateCardScreen extends React.Component {
 
     render() {
         return (
-            <>
-                <ScrollView style={styles.scrollContainer}>
+            <Container style={styles.container}>
                     <Titlebar>
                         <Avatar source={require("../assets/profile.png")} />
                         <TouchableOpacity onPress={() => this.props.navigation.navigate({
@@ -278,27 +277,27 @@ class CreateCardScreen extends React.Component {
                             <View style={{ flexDirection: 'row' }} >
                                 <View style={{ flexDirection: 'column', }} >
                                     <View style={{ flexDirection: 'row' }} >
-                                        <Text style={{ color: '#137AC2', textAlignVertical: 'center', left: 0, width: '33%' }}>Full Name: </Text>
-                                        <TouchableOpacity style={{ backgroundColor: '#D0D0D0', borderColor: '#000', right: 5, margin: 2, width: '67%' }}>
-                                            <TextInput containerStyle={{}} value={this.state.profile[0].FullName} onChangeText={fullName => this.handleProfileEdit(fullName, 0)} />
+                                        <Text style={{ color: '#137AC2', fontSize: 15, fontWeight: 'bold', textAlignVertical: 'center', left: 0, marginTop: 15, width: '33%' }}>Full Name: </Text>
+                                        <TouchableOpacity style={{right: 5, margin: 2, width: '67%' }}>
+                                            <TextInput style={styles.textInput} value={this.state.profile[0].FullName} onChangeText={fullName => this.handleProfileEdit(fullName, 0)} />
                                         </TouchableOpacity>
                                     </View>
                                     <View style={{ flexDirection: 'row' }} >
-                                        <Text style={{ color: '#137AC2', textAlignVertical: 'center', width: '33%' }}>Email: </Text>
-                                        <TouchableOpacity style={{ backgroundColor: '#D0D0D0', borderColor: '#000', right: 5, margin: 2, width: '67%' }}>
-                                            <TextInput containerStyle={{}} value={this.state.profile[1].Email} onChangeText={Email => this.handleProfileEdit(Email, 1)} />
+                                        <Text style={{ color: '#137AC2', fontSize: 15, fontWeight: 'bold', textAlignVertical: 'center',  marginTop: 15, width: '33%' }}>Email: </Text>
+                                        <TouchableOpacity style={{ right: 5, margin: 2, width: '67%' }}>
+                                            <TextInput style={styles.textInput} value={this.state.profile[1].Email} onChangeText={Email => this.handleProfileEdit(Email, 1)} />
                                         </TouchableOpacity>
                                     </View>
                                     <View style={{ flexDirection: 'row' }} >
-                                        <Text style={{ color: '#137AC2', textAlignVertical: 'center', width: '33%' }}>Mobile: </Text>
-                                        <TouchableOpacity style={{ backgroundColor: '#D0D0D0', borderColor: '#000', right: 5, margin: 2, width: '67%' }} >
-                                            <TextInput containerStyle={{}} keyboardType={'phone-pad'} value={this.state.profile[2].Mobile} onChangeText={Mobile => this.handleProfileEdit(Mobile, 2)} />
+                                        <Text style={{ color: '#137AC2', fontSize: 15, fontWeight: 'bold', textAlignVertical: 'center',  marginTop: 15, width: '33%' }}>Mobile: </Text>
+                                        <TouchableOpacity style={{ right: 5, margin: 2, width: '67%' }} >
+                                            <TextInput style={styles.textInput} keyboardType={'phone-pad'} returnKeyType={ 'done' } value={this.state.profile[2].Mobile} onChangeText={Mobile => this.handleProfileEdit(Mobile, 2)} />
                                         </TouchableOpacity>
                                     </View>
                                     <View style={{ flexDirection: 'row' }} >
-                                        <Text style={{ color: '#137AC2', textAlignVertical: 'center', width: '33%' }}>Bio: </Text>
-                                        <TouchableOpacity style={{ backgroundColor: '#D0D0D0', borderColor: '#000', right: 5, margin: 2, width: '67%', justifyContent: 'flex-end' }} >
-                                            <TextInput containerStyle={{}} value={this.state.profile[3].Bio} onChangeText={Bio => this.handleProfileEdit(Bio, 3)} />
+                                        <Text style={{ color: '#137AC2', fontSize: 15, fontWeight: 'bold', textAlignVertical: 'center',  marginTop: 15, width: '33%' }}>Bio: </Text>
+                                        <TouchableOpacity style={{ right: 5, margin: 2, width: '67%', justifyContent: 'flex-end' }} >
+                                            <TextInput multiline={true} numberOfLines={4} blurOnSubmit={true} style={styles.textArea} value={this.state.profile[3].Bio} onChangeText={Bio => this.handleProfileEdit(Bio, 3)} />
                                         </TouchableOpacity>
                                     </View>
                                 </View>
@@ -321,7 +320,10 @@ class CreateCardScreen extends React.Component {
                                     <View style={{ alignItems: 'center' }}>
                                         <ModalSelector
                                             data={this.presetMedias}
-                                            initValue="Domain"
+                                            initValue="Select Social Media"
+                                            overlayStyle ={{flex: 1, padding: '5%', justifyContent: 'flex-end', backgroundColor: 'rgba(0,0,0,0.7)'}}
+                                            optionContainerStyle = {{width:'100%'}}
+                                            cancelContainerStyle = {{width:'100%'}}
                                             keyExtractor={item => item.key}
                                             labelExtractor={item => item.key}
                                             onChange={(option) => this.handleAddDomain(option.key, option.link, false)}
@@ -334,28 +336,28 @@ class CreateCardScreen extends React.Component {
                                 <>
                                     <View style={{ alignItems: 'flex-end' }} >
                                         <TouchableOpacity onPress={() => this.handleCancelAdd()}>
-                                            <Text style={{ color: '#D0D0D0', fontWeight: "300" }} >X</Text>
+                                            <Text style={{ color: '#D0D0D0', fontWeight: "300", padding: 10}} >X</Text>
                                         </TouchableOpacity>
                                     </View>
                                     <View style={{ flexDirection: 'column', alignItems: 'flex-start' }}>
-                                        <Text style={{ fontWeight: 'bold', fontSize: 15, textAlign: 'left', paddingBottom: 5 }}>{this.state.mediaInput["key"]} profile URL:</Text>
-                                        <TextInput style={{ borderBottomColor: "#D0D0D0" }} value={this.state.mediaInput["link"]} onChangeText={url => this.handleURLEdit(url)}></TextInput>
+                                        <Text style={{ fontWeight: 'bold', fontSize: 15, alignSelf: 'center', paddingBottom: 5 }}>{this.state.mediaInput["key"]} profile URL</Text>
+                                        <TextInput style={styles.textInput} value={this.state.mediaInput["link"]} onChangeText={url => this.handleURLEdit(url)}></TextInput>
                                     </View>
                                     {this.state.editActive ?
                                         <>
                                             <View style={{ justifyContent: 'center', flexDirection: "row" }} >
-                                                <TouchableOpacity style={{ padding: 3, backgroundColor: "#032c8e", borderRadius: 15, alignItems: 'center', margin: 2 }} onPress={() => this.handleSaveLink()} >
+                                                <TouchableOpacity style={{ padding: 8, backgroundColor: "#032c8e", borderRadius: 15, alignItems: 'center', margin: 2 }} onPress={() => this.handleSaveLink()} >
                                                     <Text style={{ textAlignVertical: 'center', color: '#FFF' }} > Update Link</Text>
                                                 </TouchableOpacity>
-                                                <TouchableOpacity style={{ padding: 3, backgroundColor: "#e64940", borderRadius: 15, alignItems: 'center', margin: 2 }} onPress={() => this.handleDeleteLink()} >
+                                                <TouchableOpacity style={{ padding: 8, backgroundColor: "#e64940", borderRadius: 15, alignItems: 'center', margin: 2 }} onPress={() => this.handleDeleteLink()} >
                                                     <Text style={{ textAlignVertical: 'center', color: '#FFF' }} > Delete Link</Text>
                                                 </TouchableOpacity>
                                             </View>
                                         </> :
                                         <>
                                             <View style={{ alignItems: 'center' }} >
-                                                <TouchableOpacity style={{ padding: 3, backgroundColor: "#032c8e", borderRadius: 15, alignItems: 'center', margin: 2 }} onPress={() => this.handleSaveLink()} >
-                                                    <Text style={{ textAlignVertical: 'center', color: '#FFF' }} > Save Link</Text>
+                                                <TouchableOpacity style={{ padding: 8, backgroundColor: "#032c8e", borderRadius: 15, alignItems: 'center', margin: 2 }} onPress={() => this.handleSaveLink()} >
+                                                    <Text style={{ textAlignVertical: 'center', color: '#FFF' }} >Save Link</Text>
                                                 </TouchableOpacity>
                                             </View>
                                         </>
@@ -379,15 +381,20 @@ class CreateCardScreen extends React.Component {
                             }
                         </Card>
                     </View>
-                </ScrollView>
                 <TouchableOpacity style={styles.saveBtn} onPress={() => this.handleProfileSave()}>
                     <Text style={styles.saveText}>Save Profile</Text>
                 </TouchableOpacity>
-            </>
+
+            </Container>
         );
     }
 
 }
+
+const Container = styled.View`
+    flex: 1;
+    background-color: white;
+`
 
 const Titlebar = styled.View`
 	width: 100%;
@@ -455,11 +462,10 @@ const styles = StyleSheet.create({
     },
     primaryCard: {
         borderColor: "#137AC2",
-        borderWidth: 5,
         backgroundColor: "#FFF",
         borderRadius: 8,
         padding: 10,
-        margin: 10,
+        margin: 0,
     },
     mediaContainer: {
         position: 'relative',
@@ -469,7 +475,7 @@ const styles = StyleSheet.create({
     },
     saveBtn: {
         position: 'absolute',
-        bottom: 15,
+        bottom: 25,
         width: "80%",
         backgroundColor: "#137AC2",
         borderRadius: 25,
@@ -477,8 +483,30 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
         alignItems: "center",
         justifyContent: "center",
-        marginTop: 40,
-        marginBottom: 10
+    },
+    textInput: {
+        width: "100%",
+        backgroundColor: "#EFEFEF",
+        color: "#032c8e",
+        borderRadius: 20,
+        height: 45,
+        marginBottom: 6,
+        alignSelf: 'center',
+        alignItems: "center",
+        justifyContent: "center",
+        padding: 7
+    },
+    textArea: {
+        width: "100%",
+        backgroundColor: "#EFEFEF",
+        color: "#032c8e",
+        borderRadius: 10,
+        height: 85,
+        marginBottom: 6,
+        alignSelf: 'center',
+        alignItems: "center",
+        justifyContent: "center",
+        padding: 8
     },
     saveText: {
         color: "white"

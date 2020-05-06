@@ -2,7 +2,7 @@ import React from "react";
 import styled, { css } from "@emotion/native";
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
-import { StyleSheet, Text, Image, TextInput, TouchableOpacity, View, FlatList, Alert } from "react-native";
+import { StyleSheet, Text, Image, TextInput, TouchableOpacity, View, FlatList, ScrollView, Alert } from "react-native";
 import { Card, CheckBox } from 'react-native-elements';
 import * as firebaseApp from "firebase"
 import Profile from "./Profile";
@@ -122,7 +122,7 @@ class CreateCardScreen extends React.Component {
 
     render() {
         return (
-            <View style={styles.container}>
+            <Container>
                 <Titlebar>
                     <Avatar source={require("../assets/profile.png")} />
                     <TouchableOpacity
@@ -133,6 +133,8 @@ class CreateCardScreen extends React.Component {
                         <Title>Cancel</Title>
                     </TouchableOpacity>
                 </Titlebar>
+                <ScrollView style={styles.scrollContainer}>
+                <View style={styles.container}>
                 <View style={styles.primaryContainer}>
                     <Card
                         title='Primary Information'
@@ -143,21 +145,30 @@ class CreateCardScreen extends React.Component {
                                     <Text style={{ textAlignVertical:'center', width: '95%', backgroundColor:'#47ceff', textAlign:'left',  padding: 12, marginTop:7, marginBottom:7, fontWeight: "bold", textAlign: 'center' }} >Full Name:</Text>
                                     <Text style={{ textAlignVertical:'center', width: '95%', backgroundColor:'#47ceff', textAlign:'left',  padding: 13, marginTop:7, marginBottom:9,fontWeight: "bold", textAlign: 'center', borderRadius:5 }}>Email: </Text>
                                     <Text style={{ textAlignVertical:'center', width: '95%', backgroundColor:'#47ceff', textAlign:'left',  padding: 13, marginTop:5, marginBottom:9,fontWeight: "bold", textAlign: 'center', borderRadius:5 }}>Mobile: </Text>
-                                    <Text style={{ textAlignVertical:'center', width: '95%', backgroundColor:'#47ceff', textAlign:'left',  padding: 13, marginTop:5, marginBottom:10,fontWeight: "bold", textAlign: 'center', borderRadius:5 }} >Bio: </Text>
                                 </View>
                                 <View style={{width:'50%', flexDirection:'column', alignItems:'flex-start'}}>
-                                    <CheckBox containerStyle={{  width: '95%', alignSelf: 'flex-end' }} right iconRight title={<Text style={{ padding: 3, marginTop:0, fontWeight: "bold", textAlign: 'center' }}>{this.state.profile[0].FullName}</Text>} checked={true} />
-                                    <CheckBox containerStyle={{  width: '95%', alignSelf: 'flex-end' }} right iconRight title={<Text style={{ padding: 3, marginTop:0, fontWeight: "bold", }}>{this.state.profile[1].Email}</Text>} onPress={() => this.handleProfileClick(this.state.profile[1])} checked={this.state.profile[1].checked} />
+                                    <CheckBox containerStyle={{  width: '95%', alignSelf: 'flex-end' }} right iconRight title={<Text style={{ padding: 3, marginTop:0, fontWeight: "bold"}}>{this.state.profile[0].FullName}</Text>} checked={true} />
+                                    <CheckBox containerStyle={{  width: '95%', alignSelf: 'flex-end' }} right iconRight title={<Text style={{ padding: 3, marginTop:0, width: '90%', fontWeight: "bold", }}>{this.state.profile[1].Email}</Text>} onPress={() => this.handleProfileClick(this.state.profile[1])} checked={this.state.profile[1].checked} />
                                     <CheckBox containerStyle={{  width: '95%', alignSelf: 'flex-end' }} right iconRight title={<Text style={{ padding: 3, marginTop:0, fontWeight: "bold", }}>{this.state.profile[2].Mobile}</Text>} onPress={() => this.handleProfileClick(this.state.profile[2])} checked={this.state.profile[2].checked} />
-                                    <CheckBox containerStyle={{  width: '95%', alignSelf: 'flex-end' }} right iconRight title={<Text style={{ padding: 3, marginTop:0, fontWeight: "bold", }}>{this.state.profile[3].Bio}</Text>} onPress={() => this.handleProfileClick(this.state.profile[3])} checked={this.state.profile[3].checked} />
                                 </View>
                         </View>
+                        
+                    </Card>
+                    <View style={styles.divider}>
+                    </View>
+                    <Card
+                        title='Your Bio'
+                        titleStyle={{ color: '#137AC2' }}
+                        containerStyle={styles.primaryCard} >
 
+                        <View style={{ flexDirection: 'row', justifyContent: 'flex-start'}} >
+                            <CheckBox containerStyle={{  width: '95%', alignSelf: 'flex-end' }} right iconRight title={<Text style={{ padding: 3, width: '90%', marginTop:0, fontWeight: "bold", }}>{this.state.profile[3].Bio}</Text>} onPress={() => this.handleProfileClick(this.state.profile[3])} checked={this.state.profile[3].checked} />
+                        </View>
                     </Card>
                 </View>
 
                 <View style={styles.divider}>
-                    <Text style={{ color: '#137AC2', textAlign: 'center' }}>Chose which social media profiles you'd like to attach to this card!</Text>
+                    <Text style={{ color: '#137AC2', textAlign: 'center' }}>Choose which social media profiles you'd like to attach to this card!</Text>
                 </View>
 
                 <View style={styles.mediaContainer} >
@@ -168,15 +179,23 @@ class CreateCardScreen extends React.Component {
                         }
 
                     </Card>
-
-                    <TouchableOpacity style={styles.saveBtn} onPress={() => this.handleProfileSave()}>
-                        <Text style={styles.saveText}>Save Card</Text>
-                    </TouchableOpacity>
                 </View>
-            </View>
+
+                </View>
+                </ScrollView>
+                <TouchableOpacity style={styles.saveBtn} onPress={() => this.handleProfileSave()}>
+                        <Text style={styles.saveText}>Save Card</Text>
+                </TouchableOpacity>
+            </Container>
+
         );
     }
 }
+
+const Container = styled.View`
+    flex: 1;
+    background-color: white;
+`
 
 const Titlebar = styled.View`
 	width: 100%;
@@ -244,7 +263,7 @@ const styles = StyleSheet.create({
     },
     saveBtn: {
         position: 'absolute',
-        bottom: 15,
+        bottom: 25,
         width: "80%",
         backgroundColor: "#137AC2",
         borderRadius: 25,
@@ -252,8 +271,12 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
         alignItems: "center",
         justifyContent: "center",
-        marginTop: 40,
-        marginBottom: 10
+    },
+    scrollContainer: {
+        flexGrow: 1,
+        width: "100%",
+        alignSelf: 'center',
+        
     },
     saveText: {
         color: "white"

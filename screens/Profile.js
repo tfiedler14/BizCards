@@ -76,6 +76,7 @@ class Profile extends React.Component {
 		var time = ""
 
 		await userInfo.on("value", dataSnapshot => {
+			console.log()
 			dataSnapshot.forEach(child => {
 				if (child.key == 'profile') {
 					var proArray = child.val()
@@ -85,8 +86,14 @@ class Profile extends React.Component {
 				}
 				else if (child.key == 'medias') {
 					var mediaArray = child.val()
-					mediaArray.forEach((item) => {
-						loadsocialMedias.push(item)
+					socialSet = new Set()
+					loadsocialMedias = mediaArray.filter(function(item) {
+						if(!socialSet.has(item.site)){
+							socialSet.add(item.site)
+							return true
+						}else{
+							return false
+						}
 					})
 				} else {
 					time = child.val()
@@ -155,8 +162,7 @@ class Profile extends React.Component {
 							titleStyle={{ color: '#137AC2' }}
 							containerStyle={styles.primaryCard}
 						>
-							<View style={{ flexDirection: 'row', justifyContent: 'space-between' }} >
-								{/* <View style={{ flexDirection: 'column', alignItems: 'flex-start' }} > */}
+							<View style={{ flexDirection: 'row', justifyContent: 'flex-start' }} >
 								<View style={{ width: '50%', left: 0 }}>
 									<View style={styles.cardStyle}>
 										<Text style={styles.text}>Name: </Text>
@@ -192,9 +198,7 @@ class Profile extends React.Component {
 											}
 										 }} />)
 									}
-
 								</View>
-								{/* </View> */}
 							</View>
 						</Card>
 
@@ -207,8 +211,8 @@ class Profile extends React.Component {
 								titleStyle={{ color: '#137AC2' }}
 								containerStyle={styles.primaryCard}
 							>
-								<View style={{ alignItems: 'center' }}>
-									<QRCodeBlock >
+								<View style={{ alignItems: 'center'}}>
+									<QRCodeBlock>
 										<TouchableOpacity onPress={this._handlePressButtonAsync}>
 											{console.log("HELLO", this.userID)}
 											{this.userID != undefined ? <QRCode
@@ -356,7 +360,6 @@ const styles = StyleSheet.create({
 		borderRadius: 8,
 		padding: 10,
 		margin: 10,
-
 	},
 	cardStyle: {
 		flex: 1,

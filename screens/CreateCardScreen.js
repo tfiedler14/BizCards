@@ -45,9 +45,15 @@ class CreateCardScreen extends React.Component {
                 }
                 else if (child.key == 'medias') {
                     var mediaArray = child.val()
-                    mediaArray.forEach((item) => {
-                        loadsocialMedias.push(item)
-                    })
+					socialSet = new Set()
+                    loadsocialMedias = mediaArray.filter(function(item) {
+						if(!socialSet.has(item.site)){
+							socialSet.add(item.site)
+							return true
+						}else{
+							return false
+						}
+					})
                 } else {
                     time = child.val()
                 }

@@ -14,7 +14,7 @@ class CreateCardScreen extends React.Component {
         { key: "facebook", link: "https://www.facebook.com/" },
         { key: "github", link: "https://github.com/" },
         { key: "twitter", link: "https://twitter.com/" },
-        { key: "linkedIn", link: "https://linkedIn.com/in/" },
+        { key: "linkedin", link: "https://linkedin.com/in/" },
     ]
     constructor(props) {
         super(props);
@@ -279,25 +279,25 @@ class CreateCardScreen extends React.Component {
                                 <View style={{ flexDirection: 'column', }} >
                                     <View style={{ flexDirection: 'row' }} >
                                         <Text style={{ color: '#137AC2', textAlignVertical: 'center', left: 0, width: '33%' }}>Full Name: </Text>
-                                        <TouchableOpacity style={{ backgroundColor: '#D0D0D0', borderColor: '#000', right: 0, margin: 2, width: '67%' }}>
+                                        <TouchableOpacity style={{ backgroundColor: '#D0D0D0', borderColor: '#000', right: 5, margin: 2, width: '67%' }}>
                                             <TextInput containerStyle={{}} value={this.state.profile[0].FullName} onChangeText={fullName => this.handleProfileEdit(fullName, 0)} />
                                         </TouchableOpacity>
                                     </View>
                                     <View style={{ flexDirection: 'row' }} >
                                         <Text style={{ color: '#137AC2', textAlignVertical: 'center', width: '33%' }}>Email: </Text>
-                                        <TouchableOpacity style={{ backgroundColor: '#D0D0D0', borderColor: '#000', right: 0, margin: 2, width: '67%' }}>
+                                        <TouchableOpacity style={{ backgroundColor: '#D0D0D0', borderColor: '#000', right: 5, margin: 2, width: '67%' }}>
                                             <TextInput containerStyle={{}} value={this.state.profile[1].Email} onChangeText={Email => this.handleProfileEdit(Email, 1)} />
                                         </TouchableOpacity>
                                     </View>
                                     <View style={{ flexDirection: 'row' }} >
                                         <Text style={{ color: '#137AC2', textAlignVertical: 'center', width: '33%' }}>Mobile: </Text>
-                                        <TouchableOpacity style={{ backgroundColor: '#D0D0D0', borderColor: '#000', right: 0, margin: 2, width: '67%' }} >
+                                        <TouchableOpacity style={{ backgroundColor: '#D0D0D0', borderColor: '#000', right: 5, margin: 2, width: '67%' }} >
                                             <TextInput containerStyle={{}} keyboardType={'phone-pad'} value={this.state.profile[2].Mobile} onChangeText={Mobile => this.handleProfileEdit(Mobile, 2)} />
                                         </TouchableOpacity>
                                     </View>
                                     <View style={{ flexDirection: 'row' }} >
                                         <Text style={{ color: '#137AC2', textAlignVertical: 'center', width: '33%' }}>Bio: </Text>
-                                        <TouchableOpacity style={{ backgroundColor: '#D0D0D0', borderColor: '#000', right: 0, margin: 2, width: '67%', justifyContent: 'flex-end' }} >
+                                        <TouchableOpacity style={{ backgroundColor: '#D0D0D0', borderColor: '#000', right: 5, margin: 2, width: '67%', justifyContent: 'flex-end' }} >
                                             <TextInput containerStyle={{}} value={this.state.profile[3].Bio} onChangeText={Bio => this.handleProfileEdit(Bio, 3)} />
                                         </TouchableOpacity>
                                     </View>

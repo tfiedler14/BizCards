@@ -88,6 +88,9 @@ class CreateCardScreen extends React.Component {
         if (field == this.state.profile[2]) {
             temp[2].checked = !field.checked
         }
+        if(field == this.state.profile[3]){
+            temp[3].checked = !field.checked
+        }
         this.setState({
             profile: temp
         })
@@ -106,8 +109,8 @@ class CreateCardScreen extends React.Component {
         firebaseApp.database().ref("/users/" + this.props.user.uid + "/profile/").set(this.state.profile);
         return firebaseApp.database().ref("/users/" + this.props.user.uid + "/medias/").set(this.state.socialMedias).then(() => {
             Alert.alert("Save Successful", "The adjusts you've made on your profile have been saved!");
-            this.props.navigation.navigate('Profile')
-        })
+            
+        }).then(this.props.navigation.navigate('Profile'))
 
     }
 
@@ -128,16 +131,16 @@ class CreateCardScreen extends React.Component {
                         containerStyle={styles.primaryCard} >
                         <View style={{ flexDirection: 'row', justifyContent: 'flex-start'}} >
                                 <View style={{width: '50%', flexDirection:'column', alignItems:'flex-start'}}>
-                                    <Text style={{ textAlignVertical:'center', width: '95%', backgroundColor:'#D0D0D0', textAlign:'left',  padding: 12, marginTop:7, marginBottom:7, fontWeight: "bold", textAlign: 'center' }} >Full Name:</Text>
-                                    <Text style={{ textAlignVertical:'center', width: '95%', backgroundColor:'#D0D0D0', textAlign:'left',  padding: 13, marginTop:7, marginBottom:9,fontWeight: "bold", textAlign: 'center', borderRadius:5 }}>Email: </Text>
-                                    <Text style={{ textAlignVertical:'center', width: '95%', backgroundColor:'#D0D0D0', textAlign:'left',  padding: 13, marginTop:5, marginBottom:9,fontWeight: "bold", textAlign: 'center', borderRadius:5 }}>Mobile: </Text>
-                                    <Text style={{ textAlignVertical:'center', width: '95%', backgroundColor:'#D0D0D0', textAlign:'left',  padding: 13, marginTop:5, marginBottom:10,fontWeight: "bold", textAlign: 'center', borderRadius:5 }} >Bio: </Text>
+                                    <Text style={{ textAlignVertical:'center', width: '95%', backgroundColor:'#47ceff', textAlign:'left',  padding: 12, marginTop:7, marginBottom:7, fontWeight: "bold", textAlign: 'center' }} >Full Name:</Text>
+                                    <Text style={{ textAlignVertical:'center', width: '95%', backgroundColor:'#47ceff', textAlign:'left',  padding: 13, marginTop:7, marginBottom:9,fontWeight: "bold", textAlign: 'center', borderRadius:5 }}>Email: </Text>
+                                    <Text style={{ textAlignVertical:'center', width: '95%', backgroundColor:'#47ceff', textAlign:'left',  padding: 13, marginTop:5, marginBottom:9,fontWeight: "bold", textAlign: 'center', borderRadius:5 }}>Mobile: </Text>
+                                    <Text style={{ textAlignVertical:'center', width: '95%', backgroundColor:'#47ceff', textAlign:'left',  padding: 13, marginTop:5, marginBottom:10,fontWeight: "bold", textAlign: 'center', borderRadius:5 }} >Bio: </Text>
                                 </View>
                                 <View style={{width:'50%', flexDirection:'column', alignItems:'flex-start'}}>
-                                    <CheckBox containerStyle={{ backgroundColor:'#D0D0D0', width: '95%', alignSelf: 'flex-end' }} right iconRight title={<Text style={{ padding: 3, marginTop:0, fontWeight: "bold", textAlign: 'center' }}>{this.state.profile[0].FullName}</Text>} checked={true} />
-                                    <CheckBox containerStyle={{ backgroundColor:'#D0D0D0', width: '95%', alignSelf: 'flex-end' }} right iconRight title={<Text style={{ padding: 3, marginTop:0, fontWeight: "bold", }}>{this.state.profile[1].Email}</Text>} onPress={() => this.handleProfileClick(this.state.profile[1])} checked={this.state.profile[1].checked} />
-                                    <CheckBox containerStyle={{ backgroundColor:'#D0D0D0', width: '95%', alignSelf: 'flex-end' }} right iconRight title={<Text style={{ padding: 3, marginTop:0, fontWeight: "bold", }}>{this.state.profile[2].Mobile}</Text>} onPress={() => this.handleProfileClick(this.state.profile[2])} checked={this.state.profile[2].checked} />
-                                    <CheckBox containerStyle={{ backgroundColor:'#D0D0D0', width: '95%', alignSelf: 'flex-end' }} right iconRight title={<Text style={{ padding: 3, marginTop:0, fontWeight: "bold", }}>{this.state.profile[3].Bio}</Text>} onPress={() => this.handleProfileClick(this.state.profile[3])} checked={this.state.profile[3].checked} />
+                                    <CheckBox containerStyle={{  width: '95%', alignSelf: 'flex-end' }} right iconRight title={<Text style={{ padding: 3, marginTop:0, fontWeight: "bold", textAlign: 'center' }}>{this.state.profile[0].FullName}</Text>} checked={true} />
+                                    <CheckBox containerStyle={{  width: '95%', alignSelf: 'flex-end' }} right iconRight title={<Text style={{ padding: 3, marginTop:0, fontWeight: "bold", }}>{this.state.profile[1].Email}</Text>} onPress={() => this.handleProfileClick(this.state.profile[1])} checked={this.state.profile[1].checked} />
+                                    <CheckBox containerStyle={{  width: '95%', alignSelf: 'flex-end' }} right iconRight title={<Text style={{ padding: 3, marginTop:0, fontWeight: "bold", }}>{this.state.profile[2].Mobile}</Text>} onPress={() => this.handleProfileClick(this.state.profile[2])} checked={this.state.profile[2].checked} />
+                                    <CheckBox containerStyle={{  width: '95%', alignSelf: 'flex-end' }} right iconRight title={<Text style={{ padding: 3, marginTop:0, fontWeight: "bold", }}>{this.state.profile[3].Bio}</Text>} onPress={() => this.handleProfileClick(this.state.profile[3])} checked={this.state.profile[3].checked} />
                                 </View>
 
                         </View>
@@ -152,7 +155,7 @@ class CreateCardScreen extends React.Component {
                 <View style={styles.mediaContainer} >
                     <Card
                         containerStyle={styles.primaryCard} >
-                        {this.state.socialMedias.length != 0 ? <FlatList data={this.state.socialMedias} extraData={this.state} keyExtractor={item => item.site} renderItem={({ item }) => <CheckBox containerStyle={{backgroundColor:'#D0D0D0'}} right iconRight title={item.site} key={item.site} onPress={() => this.handleClick(item.site)} checked={item.checked} />} /> :
+                        {this.state.socialMedias.length != 0 ? <FlatList data={this.state.socialMedias} extraData={this.state} keyExtractor={item => item.site} renderItem={({ item }) => <CheckBox containerStyle={{}} right iconRight title={item.site} key={item.site} onPress={() => this.handleClick(item.site)} checked={item.checked} />} /> :
                             <Text style={{ color: "#137AC2", padding: 5, fontWeight: "bold", textAlign: 'center' }}>Please add socialMedia links to enable bizCard customization</Text>
                         }
 

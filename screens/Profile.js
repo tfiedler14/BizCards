@@ -16,8 +16,8 @@ class Profile extends React.Component {
 	_isMounted = false;
 	constructor(props) {
 		super(props);
-		const userID = this.props.navigation.getParam('userUid');
-		this.userInfo = firebaseApp.database().ref("/users/" + userID);
+		this.userID = this.props.navigation.getParam('userUid');
+		this.userInfo = firebaseApp.database().ref("/users/" + this.userID);
 		this.state = {
 			isLoading: true,
 			profile: [
@@ -32,7 +32,7 @@ class Profile extends React.Component {
 	}
 
 	componentWillMount() {
-		
+
 		setTimeout(() => {
 			this.setState({
 				isLoading: false
@@ -41,6 +41,9 @@ class Profile extends React.Component {
 			10)
 	}
 
+	componentWillUpdate(){
+		this.userID = this.props.user.uid
+	}
 
 	componentDidMount() {
 		this._isMounted = true;
@@ -53,7 +56,7 @@ class Profile extends React.Component {
 		}, 10)
 		this.listenForUser(this.userInfo)
 	}
-	
+
 
 	componentWillUnmount() {
 		this._isMounted = false;
@@ -62,7 +65,7 @@ class Profile extends React.Component {
 	async listenForUser(userInfo) {
 		userInfoCheck = this.userInfo.toString()
 		console.log("listenForuser", userInfoCheck)
-		if(userInfoCheck.includes("undefined")){
+		if (userInfoCheck.includes("undefined")) {
 			this.userInfo = firebaseApp.database().ref("/users/" + this.props.user.uid)
 			userInfo = this.userInfo
 		}
@@ -106,8 +109,8 @@ class Profile extends React.Component {
 	}
 
 	render() {
-		const userUid = this.props.navigation.getParam('userUid'); //added
-
+		// const userUid = this.props.navigation.getParam('userUid'); //added
+		
 		const actions = [
 			{
 				text: "Set Card",
@@ -139,28 +142,11 @@ class Profile extends React.Component {
 
 		return (
 			<Container>
-				<View style={{flexDirection: 'row'}}>
-					<Titlebar>
-						<Avatar source={require("../assets/profile.png")} />
-						<Title>Welcome back,</Title>
-						<Name>{this.props.user.name}</Name>
-					</Titlebar>
-					<TouchableOpacity
-						onPress={() => this.props.navigation.navigate('Settings')}
-						style={{
-							alignItems: 'center',
-							justifyContent: 'center',
-							width: 70,
-							position: 'absolute',
-							top: 40,
-							right: 10,
-							height: 70,
-						}}
-					>
-						<AddIcon source={require("../assets/gear.png")} />
-					</TouchableOpacity>
-				</View>
-
+				<Titlebar>
+					<Avatar source={require("../assets/profile.png")} />
+					<Title>Welcome back,</Title>
+					<Name>{this.props.user.name}</Name>
+				</Titlebar>
 				<ScrollView style={styles.scrollContainer}>
 					<View >
 						<Card
@@ -169,68 +155,119 @@ class Profile extends React.Component {
 							containerStyle={styles.primaryCard}
 						>
 							<View style={{ flexDirection: 'row', justifyContent: 'space-between' }} >
-								<View style={{ flexDirection: 'column', alignItems: 'flex-start' }} >
+								{/* <View style={{ flexDirection: 'column', alignItems: 'flex-start' }} > */}
+								<View style={{ width: '50%', left: 0 }}>
 									<View style={styles.cardStyle}>
+										<Text style={styles.text}>Name: </Text>
+										<Text style={{ fontWeight: "bold", }}>{this.state.profile[0].FullName}</Text>
+									</View>
+									{this.state.profile[1].checked ? (<View style={styles.cardStyle}>
 										<Text style={styles.text}>Email: </Text>
 										<Text style={{ fontWeight: "bold", }}>{this.state.profile[1].Email}</Text>
-									</View>
-									<View style={styles.cardStyle}>
+									</View> ): <></> }
+									
+									{this.state.profile[2].checked ? 
+									(<View style={styles.cardStyle}>
 										<Text style={styles.text} >Mobile: </Text>
 										<Text style={{ fontWeight: "bold", }}>{this.state.profile[2].Mobile}</Text>
-									</View>
-									<View style={styles.cardStyle}>
+									</View>) : <></>}
+
+									{this.state.profile[3].checked ? (<View style={styles.cardStyle}>
 										<Text style={styles.text}  >Bio: </Text>
 										<Text style={{ fontWeight: "bold", }}>{this.state.profile[3].Bio}</Text>
-									</View>
-									<View style={styles.cardStyle}>
-										<Text style={styles.text} >Social Media: </Text>
-										{(this.state.socialMedias.length === 0) ?
-											(<Text></Text>)
-											:
-											(<FlatList data={this.state.socialMedias} extraData={this.state} keyExtractor={item => item.site} key={item => item.site} renderItem={({ item }) =>
-												<TouchableOpacity onPress={() => { WebBrowser.openBrowserAsync(item.link) }} style={{ margin: 5, padding: 8, alignItems: 'center', backgroundColor: "#47ceff", borderColor: '#D0D0D0', borderRadius: 10, borderWidth: 1 }}>
-													<Text style={{ color: '#FFF', fontWeight: "bold", fontSize: 12 }}>{item.site}</Text>
-												</TouchableOpacity>
-											} />)
-										}
-									</View>
+									</View>) : <></>}
 								</View>
+
+								<View style={{ width: '50%', right: 0 }}>
+									<Text style={{ fontSize: 15, fontWeight: 'bold', color: '#1A1E9C', alignSelf: 'center' }} >Social Media: </Text>
+									{(this.state.socialMedias.length === 0) ?
+										(<Text></Text>)
+										:
+										(<FlatList data={this.state.socialMedias} extraData={this.state} keyExtractor={item => item.site} key={item => item.site} renderItem={({ item }) => {
+											if(item.checked){
+												return(<TouchableOpacity onPress={() => { WebBrowser.openBrowserAsync(item.link) }} style={{ margin: 5, padding: 8, alignItems: 'center', backgroundColor: "#47ceff", borderColor: '#D0D0D0', borderRadius: 10, borderWidth: 1 }}>
+												<Text style={{ color: '#FFF', fontWeight: "bold", fontSize: 12 }}>{item.site}</Text>
+											</TouchableOpacity>)
+											}
+										 }} />)
+									}
+								</View>
+								{/* </View> */}
 							</View>
 						</Card>
+
+						<View style={styles.divider}>
+							<Text style={{ color: '#137AC2', textAlign: 'center' }}>Want the ability to save multiple custom cards? Start your premium subscription now!</Text>
+						</View>
+						<View style={{ alignItems: 'center' }}>
+							<Card
+								title='Scan barcode for access to profile hub'
+								titleStyle={{ color: '#137AC2' }}
+								containerStyle={styles.primaryCard}
+							>
+								<View style={{ alignItems: 'center' }}>
+									<QRCodeBlock >
+										<TouchableOpacity onPress={this._handlePressButtonAsync}>
+											{console.log("HELLO", this.userID)}
+											{this.userID != undefined ? <QRCode
+												logo={require("../assets/profile.png")}
+												codeStyle='square'
+												content={`http://bizcards.tools/profile/` + this.userID}
+											/> : <QRCode
+											logo={require("../assets/profile.png")}
+											codeStyle='square'
+											content={`http://bizcards.tools/profile/` + this.props.user.id}
+										/> }
+										</TouchableOpacity>
+									</QRCodeBlock>
+								</View>
+
+							</Card>
+
+						</View>
 					</View>
-					<View style={styles.qrcodeContainer}>
-						<QRCodeBlock >
-							<TouchableOpacity onPress={this._handlePressButtonAsync}>
-								<QRCode
-									logo={require("../assets/profile.png")}
-									codeStyle='square'
-									content={`http://bizcards.tools/profile/${userUid}`}
-								/>
-							</TouchableOpacity>
-						</QRCodeBlock>
-					</View>
-					<FloatingAction
-						style={{ marginLeft: 30 }}
-						actions={actions}
-						color="#032c8e"
-						overlayColor="rgba(244, 244, 255, 0.6)"
-						onPressItem={name => {
-							if (name === "card_Add")
-								this.props.navigation.navigate('CreateCard')
-							if (name === "card_Modify")
-								this.props.navigation.navigate({
-									routeName: 'EditProfile',
-								})
+
+
+					<TouchableOpacity
+						onPress={() => this.props.navigation.navigate('Settings')}
+						style={{
+							alignItems: 'center',
+							justifyContent: 'center',
+							width: 70,
+							position: 'absolute',
+							top: 5,
+							right: 10,
+							height: 70,
 						}}
-					/>
+					>
+						<AddIcon source={require("../assets/gear.png")} />
+					</TouchableOpacity>
+
 				</ScrollView>
+				<FloatingAction
+					style={{ marginLeft: 30, }}
+					actions={actions}
+					color="#032c8e"
+					overlayColor="rgba(244, 244, 255, 0.6)"
+					onPressItem={name => {
+						if (name === "card_Add")
+							this.props.navigation.navigate('CreateCard')
+						if (name === "card_Modify")
+							this.props.navigation.navigate({
+								routeName: 'EditProfile',
+							})
+					}}
+				/>
 			</Container >
 		)
 
 	}
 
 	_handlePressButtonAsync = async () => {
-		const userUid = this.props.navigation.getParam('userUid'); //added
+		var userUid = this.props.navigation.getParam('userUid'); //added
+		if(userUid == undefined){
+			userUid = this.props.user.uid
+		}
 		let result = await WebBrowser.openBrowserAsync('http://bizcards.tools/profile/' + userUid);
 		this.setState({ result });
 	};
@@ -295,14 +332,15 @@ const styles = StyleSheet.create({
 		color: "black",
 		right: 0
 	},
-	qrcodeContainer: {
-		alignItems: 'center',
-		justifyContent: 'center',
-		marginLeft: 150,
-		marginTop: "35%",
-		height: "15%",
-		width: "15%",
-	},
+    divider: {
+        position: 'relative',
+        marginTop: 10,
+        marginBottom: 10,
+        padding: 0,
+        width: '75%',
+		top: 0,
+		alignSelf:'center'
+    },
 	loading: {
 		flex: 1,
 		justifyContent: 'center',

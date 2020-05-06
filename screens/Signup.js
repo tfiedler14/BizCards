@@ -36,7 +36,7 @@ class Signup extends React.Component {
 			alert(e);
 		}
 
-		this.props.navigation.navigate('EditProfile')
+		
 	}
 
 	render() {

@@ -8,6 +8,7 @@ import reducer from './reducers'
 
 const middleware = applyMiddleware(thunkMiddleware)
 const store = createStore(reducer, middleware)
+console.disableYellowBox = true;
 
 export default class App extends React.Component {
 	render() {

@@ -4,6 +4,8 @@ import { View, Text, StyleSheet, TouchableOpacity, Image, TextInput, Alert, Butt
 import { Card } from 'react-native-elements';
 import { connect } from 'react-redux'
 import firebase from 'firebase'
+import * as firebaseApp from "firebase"
+
 require('firebase/auth')
 
 class Settings extends React.Component {
@@ -18,39 +20,39 @@ class Settings extends React.Component {
         };
     }
 
-	handleSignout = () => {
-		firebase.auth().signOut()
-		this.props.navigation.navigate('Login')
+    handleSignout = () => {
+        firebase.auth().signOut()
+        this.props.navigation.navigate('Login')
     }
     reauthenticate = (currentPassword) => {
         var user = firebase.auth().currentUser;
         var cred = firebase.auth.EmailAuthProvider.credential(user.email, currentPassword);
         return user.reauthenticateWithCredential(cred);
-      }
+    }
     onChangePassword = () => {
         this.reauthenticate(this.state.currentPassword).then(() => {
-          var user = firebase.auth().currentUser;
-          user.updatePassword(this.state.newPassword).then(() => {
-            Alert.alert("Password was changed");
-          }).catch((error) => { console.log(error.message); });
+            var user = firebase.auth().currentUser;
+            user.updatePassword(this.state.newPassword).then(() => {
+                Alert.alert("Password was changed");
+            }).catch((error) => { console.log(error.message); });
         }).catch((error) => { console.log(error.message) });
-      }
-    
+    }
+
     onChangeEmail = () => {
         this.reauthenticate(this.state.currentPassword).then(() => {
-          var user = firebase.auth().currentUser;
-          user.updateEmail(this.state.newEmail).then(() => {
-            Alert.alert("Email was changed");
-          }).catch((error) => { console.log(error.message); });
+            var user = firebase.auth().currentUser;
+            user.updateEmail(this.state.newEmail).then(() => {
+                Alert.alert("Email was changed");
+            }).catch((error) => { console.log(error.message); });
         }).catch((error) => { console.log(error.message) });
-      }
+    }
 
-	render() {
-		return (
-			<Container style={styles.container}>
-				<Titlebar>
-					<Avatar source={require("../assets/profile.png")} />
-					<TouchableOpacity onPress={() => this.props.navigation.navigate({
+    render() {
+        return (
+            <Container style={styles.container}>
+                <Titlebar>
+                    <Avatar source={require("../assets/profile.png")} />
+                    <TouchableOpacity onPress={() => this.props.navigation.navigate({
                         routeName: 'Profile',
                         params: {
                             userUid: this.props.user.uid
@@ -58,57 +60,59 @@ class Settings extends React.Component {
                     })}>
                         <Title>Cancel</Title>
                     </TouchableOpacity>
-				</Titlebar>
+                </Titlebar>
                 <TouchableOpacity
-                   onPress={this.handleSignout}
-                   style={{
-                       alignItems:'center',
-                       justifyContent:'center',
-                       width:70,
-                       position: 'absolute',                                          
-                       top: 40,                                                    
-                       right: 10,
-                       height:70,
-                     }}
+                    onPress={this.handleSignout}
+                    style={{
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        width: 70,
+                        position: 'absolute',
+                        top: 40,
+                        right: 10,
+                        height: 70,
+                    }}
                 >
-                <AddIcon source = {require("../assets/logOut.png")} />
+                    <AddIcon source={require("../assets/logOut.png")} />
                 </TouchableOpacity>
-				<View style={styles.primaryContainer}>
-                    <Text>Enter password to change password or email</Text> 
-                <TextInput style={styles.textInput} value={this.state.currentPassword}
-                placeholder="Current Password" autoCapitalize="none" secureTextEntry={true}
-                onChangeText={(text) => { this.setState({currentPassword: text}) }}
-                />
+                <View style={styles.primaryContainer}>
+                    <Text>Enter password to change password or email</Text>
+                    <TextInput style={styles.textInput} value={this.state.currentPassword}
+                        placeholder="Current Password" autoCapitalize="none" secureTextEntry={true}
+                        onChangeText={(text) => { this.setState({ currentPassword: text }) }}
+                    />
 
-                <TextInput style={styles.textInput} value={this.state.newPassword}
-                placeholder="New Password" autoCapitalize="none" secureTextEntry={true}
-                onChangeText={(text) => { this.setState({newPassword: text}) }}
-                />
+                    <TextInput style={styles.textInput} value={this.state.newPassword}
+                        placeholder="New Password" autoCapitalize="none" secureTextEntry={true}
+                        onChangeText={(text) => { this.setState({ newPassword: text }) }}
+                    />
 
-                <Button title="Change Password" onPress={this.onChangePassword} />
+                    <Button title="Change Password" onPress={this.onChangePassword} />
 
-                <TextInput style={styles.textInput} value={this.state.newEmail}
-                placeholder="New Email" autoCapitalize="none" keyboardType="email-address"
-                onChangeText={(text) => { this.setState({newEmail: text}) }}
-                />
+                    <TextInput style={styles.textInput} value={this.state.newEmail}
+                        placeholder="New Email" autoCapitalize="none" keyboardType="email-address"
+                        onChangeText={(text) => { this.setState({ newEmail: text }) }}
+                    />
 
-                <Button title="Change Email" onPress={this.onChangeEmail} />
+                    <Button title="Change Email" onPress={this.onChangeEmail} />
 
-                <TouchableOpacity style={styles.saveBtn} onPress={() => {
-                firebase
-                    .auth()
-                    .currentUser.delete()
-                    .then(this.props.navigation.navigate('Login'))
-                    .catch(error => {
-                    console.log('User not deleted.');
-                    });
-                }}>
-                    <Text style={styles.saveText}>Delete Account</Text>
-                </TouchableOpacity>
+                    <TouchableOpacity style={styles.saveBtn} onPress={() => {
+                        firebaseApp.database().ref("/users/" + this.props.user.uid).set(null)
+                        firebase
+                            .auth()
+                            .currentUser.delete()
+                            .then(this.props.navigation.navigate('Login'))
+                            .catch(error => {
+                                console.log('User not deleted.');
+                            });
+                            this.props.navigation.navigate('Login')
+                    }}>
+                        <Text style={styles.saveText}>Delete Account</Text>
+                    </TouchableOpacity>
                 </View>
-			</Container>
-		)
-	}
+            </Container>
+        )
+    }
 }
 
 const Container = styled.View`
@@ -161,7 +165,7 @@ const Name = styled.Text`
 `
 
 const styles = StyleSheet.create({
-	container: {
+    container: {
         flex: 1,
         backgroundColor: '#FFF',
         alignItems: 'center',
@@ -220,9 +224,9 @@ const styles = StyleSheet.create({
 })
 
 const mapStateToProps = state => {
-	return {
-		user: state.user
-	}
+    return {
+        user: state.user
+    }
 }
 
 export default connect(mapStateToProps)(Settings)

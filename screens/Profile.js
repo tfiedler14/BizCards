@@ -35,7 +35,7 @@ class Profile extends React.Component {
 
 		setTimeout(() => {
 			this.setState({
-				isLoading: false
+				isLoading: false,
 			})
 		},
 			10)
@@ -147,6 +147,7 @@ class Profile extends React.Component {
 					<Title>Welcome back,</Title>
 					<Name>{this.props.user.name}</Name>
 				</Titlebar>
+
 				<ScrollView style={styles.scrollContainer}>
 					<View >
 						<Card
@@ -191,6 +192,7 @@ class Profile extends React.Component {
 											}
 										 }} />)
 									}
+
 								</View>
 								{/* </View> */}
 							</View>
@@ -279,7 +281,7 @@ const Container = styled.View`
 `
 
 const QRCodeBlock = styled.View`
-	padding-top: 5%;
+	padding-top: 10%;
 `
 
 const Titlebar = styled.View`
@@ -332,6 +334,7 @@ const styles = StyleSheet.create({
 		color: "black",
 		right: 0
 	},
+
     divider: {
         position: 'relative',
         marginTop: 10,
@@ -384,7 +387,6 @@ const styles = StyleSheet.create({
 		flexDirection: 'column',
 	},
 	socialCardStyle: {
-		flex: 1,
 		flexDirection: 'column',
 		alignItems: 'flex-start',
 		justifyContent: 'flex-start',

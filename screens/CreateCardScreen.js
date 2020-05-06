@@ -109,8 +109,8 @@ class CreateCardScreen extends React.Component {
         firebaseApp.database().ref("/users/" + this.props.user.uid + "/profile/").set(this.state.profile);
         return firebaseApp.database().ref("/users/" + this.props.user.uid + "/medias/").set(this.state.socialMedias).then(() => {
             Alert.alert("Save Successful", "The adjusts you've made on your profile have been saved!");
-            
-        }).then(this.props.navigation.navigate('Profile'))
+            }).then(this.props.navigation.navigate('Profile'))
+
 
     }
 
@@ -120,7 +120,10 @@ class CreateCardScreen extends React.Component {
                 <Titlebar>
                     <Avatar source={require("../assets/profile.png")} />
                     <TouchableOpacity
-                        onPress={() => this.props.navigation.navigate('Profile')}>
+                        onPress={() => this.props.navigation.navigate({
+                            routeName: 'Profile',
+                            userUid: this.props.user.uid,
+                        })}>
                         <Title>Cancel</Title>
                     </TouchableOpacity>
                 </Titlebar>
@@ -142,7 +145,6 @@ class CreateCardScreen extends React.Component {
                                     <CheckBox containerStyle={{  width: '95%', alignSelf: 'flex-end' }} right iconRight title={<Text style={{ padding: 3, marginTop:0, fontWeight: "bold", }}>{this.state.profile[2].Mobile}</Text>} onPress={() => this.handleProfileClick(this.state.profile[2])} checked={this.state.profile[2].checked} />
                                     <CheckBox containerStyle={{  width: '95%', alignSelf: 'flex-end' }} right iconRight title={<Text style={{ padding: 3, marginTop:0, fontWeight: "bold", }}>{this.state.profile[3].Bio}</Text>} onPress={() => this.handleProfileClick(this.state.profile[3])} checked={this.state.profile[3].checked} />
                                 </View>
-
                         </View>
 
                     </Card>

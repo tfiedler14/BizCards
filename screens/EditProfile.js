@@ -243,6 +243,7 @@ class CreateCardScreen extends React.Component {
             firebaseApp.database().ref("/users/" + this.props.user.uid + "/profile/").set(this.state.profile);
             return firebaseApp.database().ref("/users/" + this.props.user.uid + "/medias/").set(socials).then(() => {
                 Alert.alert("Save Successful", "The adjusts you've made on your profile have been saved!");
+
             }).then(this.props.navigation.navigate('Profile'))
         } else {
             if (currState.editActive == true && profileError == false) {

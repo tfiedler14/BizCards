@@ -21,25 +21,26 @@ Our application allows users to create an electronic business card to facilitate
 
 # Implementation
 React Native
-  Works both for iOS and Android 
+⋅⋅* Works both for iOS and Android 
   
 Firebase
-  Authorization
-  Database
+⋅⋅* Authorization
+⋅⋅* Database
   
 Website (Heroku, NodeJS, Bootstrap, EJS)
-  Introduction of the app- http://bizcards.tools/
-  Shows a user information
+⋅⋅* Introduction of the app- http://bizcards.tools/
+⋅⋅* Shows a user information
 
 
 # Some Notes
 Limitation
-  Due to the  circumstance, we were unable to implement some of our stretch goal functionality.
+⋅⋅* Due to the  circumstance, we were unable to implement some of our stretch goal functionality.
 
 # Usage
 Permission is need to build off this repo.
 
-### Run The code:
+
+# Run The code:
 #### create .env file (follow .env-example syntax)
 #####
 ###### API_KEY=XXXXXXXX
@@ -53,10 +54,6 @@ Permission is need to build off this repo.
 #### Run yarn install; yarn start
 ###### (IF YOU HAVE NODE MODULES)--> rm -rf node_modules && yarn install; expo install react-native-gesture-handler; yarn start
 #### If you have any issues clear your watchman cache and it should work 
-#
-#
-#
-#
 
 # Attributions
 Login and Signup were adapted from https://heartbeat.fritz.ai/how-to-build-an-email-authentication-app-with-firebase-firestore-and-react-native-a18a8ba78574 

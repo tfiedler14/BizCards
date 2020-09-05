@@ -11,13 +11,13 @@ Recruiters get stacks of business cards, resumes and a mountain of unstructured 
 Our application allows users to create an electronic business card to facilitate networking connections. 
 
 # Prototype 
-
+![alt text](https://github.com/tfiedler14/BizCards/blob/master/assets/finDesign.png "prototype")
 
 # Current Design 
-
+![alt text](https://github.com/tfiedler14/BizCards/blob/master/assets/curDesign.png "prototype")
 
 # WebUI For Profile
-
+![alt text](https://github.com/tfiedler14/BizCards/blob/master/assets/WebGUI.png "prototype")
 
 # Implementation
 1. React Native

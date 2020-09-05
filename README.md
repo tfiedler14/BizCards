@@ -1,4 +1,4 @@
-![alt text](http://bizcards.tools/images/logo1.png "Bizcards")
+![alt text](https://github.com/tfiedler14/BizCards/blob/master/assets/logo1.png "Bizcards")
 
 # BizCards
 A quick way to create an online presence and connect with potential employers. 

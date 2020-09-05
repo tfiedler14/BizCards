@@ -24,17 +24,17 @@ Our application allows users to create an electronic business card to facilitate
   - Works both for iOS and Android 
   
 2. Firebase
-⋅⋅⋅ Authorization
-⋅⋅⋅ Database
+  - Authorization
+  - Database
   
 3. Website (Heroku, NodeJS, Bootstrap, EJS)
-⋅⋅⋅ Introduction of the app- http://bizcards.tools/
-⋅⋅⋅ Shows a user information
+  - Introduction of the app- http://bizcards.tools/
+  - Shows a user information
 
 
 # Some Notes
 1. Limitation
-⋅⋅* Due to the  circumstance, we were unable to implement some of our stretch goal functionality.
+  - Due to the  circumstance, we were unable to implement some of our stretch goal functionality.
 
 # Usage
 Permission is need to build off this repo.

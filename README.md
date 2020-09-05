@@ -36,9 +36,8 @@ Our application allows users to create an electronic business card to facilitate
 1. Limitation
   - Due to the  circumstance, we were unable to implement some of our stretch goal functionality.
 
-# Usage
-Permission is need to build off this repo.
-
+# Maintenance 
+Repo is sporadically maintained.
 
 # Run The code:
 #### create .env file (follow .env-example syntax)

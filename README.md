@@ -15,7 +15,7 @@ Our application allows users to create an electronic business card to facilitate
 
 # Current Design 
 ![alt text](https://github.com/tfiedler14/BizCards/blob/master/assets/curDesign.png "prototype")
-
+*for brevity some of the screen weren't included
 # WebUI For Profile
 ![alt text](https://github.com/tfiedler14/BizCards/blob/master/assets/WebGUI.png "prototype")
 

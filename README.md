@@ -3,7 +3,7 @@
 # BizCards
 A quick way to create an online presence and connect with potential employers. 
 
-# Problem/Objectives
+# Problem/Objective
 College students have a lot of pressure to network and form relationships with potential employers. Students spend time and money writing and printing business cards, cover letters, and resumes. 
 
 Recruiters get stacks of business cards, resumes and a mountain of unstructured emails with networking materials which creates a need for organization. This application creates a uniform way to receive students’ contact information and qualifications. 

@@ -1,5 +1,43 @@
+![alt text](http://bizcards.tools/images/logo1.png "Bizcards")
+
 # BizCards
-Customizable Electronic business cards
+A quick way to create an online presence and connect with potential employers. 
+
+# Problem/Objectives
+College students have a lot of pressure to network and form relationships with potential employers. Students spend time and money writing and printing business cards, cover letters, and resumes. 
+
+Recruiters get stacks of business cards, resumes and a mountain of unstructured emails with networking materials which creates a need for organization. This application creates a uniform way to receive students’ contact information and qualifications. 
+
+Our application allows users to create an electronic business card to facilitate networking connections. 
+
+# Prototype 
+
+
+# Current Design 
+
+
+# WebUI For Profile
+
+
+# Implementation
+React Native
+  Works both for iOS and Android 
+  
+Firebase
+  Authorization
+  Database
+  
+Website (Heroku, NodeJS, Bootstrap, EJS)
+  Introduction of the app- http://bizcards.tools/
+  Shows a user information
+
+
+# Some Notes
+Limitation
+  Due to the  circumstance, we were unable to implement some of our stretch goal functionality.
+
+# Usage
+Permission is need to build off this repo.
 
 ### Run The code:
 #### create .env file (follow .env-example syntax)
@@ -19,11 +57,9 @@ Customizable Electronic business cards
 #
 #
 #
-### Barcode Generation Instructions:
-###### yarn add react-native-custom-qr-codes-expo
-###### import { QRCode } from 'react-native-custom-qr-codes-expo'
-###### <QRCode logo={require('./dab.png')} content='http://bizcards.tools/'/>
 
+# Attributions
 Login and Signup were adapted from https://heartbeat.fritz.ai/how-to-build-an-email-authentication-app-with-firebase-firestore-and-react-native-a18a8ba78574 
+
 Change password/email was adapted from https://github.com/ProProgramming101/expo-firebase-auth-change-password/blob/master/screens/TestScreen.js 
 

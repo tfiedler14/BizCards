@@ -20,20 +20,20 @@ Our application allows users to create an electronic business card to facilitate
 
 
 # Implementation
-React Native
+1. React Native
 ⋅⋅* Works both for iOS and Android 
   
-Firebase
+2. Firebase
 ⋅⋅* Authorization
 ⋅⋅* Database
   
-Website (Heroku, NodeJS, Bootstrap, EJS)
+3. Website (Heroku, NodeJS, Bootstrap, EJS)
 ⋅⋅* Introduction of the app- http://bizcards.tools/
 ⋅⋅* Shows a user information
 
 
 # Some Notes
-Limitation
+1. Limitation
 ⋅⋅* Due to the  circumstance, we were unable to implement some of our stretch goal functionality.
 
 # Usage
